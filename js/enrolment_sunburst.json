@@ -1,0 +1,86 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Education Enrolment Pathway by Gender (2022)",
+    "subtitle": ["Who continues through the education system?", "Inner ring = Level  |  Outer ring = Gender (darker = Male, lighter = Female)"],
+    "fontSize": 18,
+    "subtitleFontSize": 11,
+    "anchor": "start"
+  },
+  "width": 500,
+  "height": 500,
+  "background": null,
+  "config": {
+    "view": {"stroke": null},
+    "axis": {"grid": false, "domain": false, "ticks": false, "labels": false}
+  },
+  "data": {"url": "data/enrolment_school_district.csv"},
+  "transform": [
+    {"filter": "datum.state == 'Malaysia' && datum.district == 'All Districts'"},
+    {"filter": "datum.date == '2022-01-01'"},
+    {"filter": "datum.sex != 'both'"},
+    {"calculate": "datum.stage == 'primary' ? 'Primary' : datum.stage == 'secondary' ? 'Secondary' : 'Post-Secondary'", "as": "level"},
+    {"calculate": "datum.sex == 'male' ? 'Male' : 'Female'", "as": "gender"},
+    {"calculate": "format(datum.students, ',.0f')", "as": "students_formatted"},
+    {
+      "joinaggregate": [{"op": "sum", "field": "students", "as": "level_total"}],
+      "groupby": ["level"]
+    },
+    {"calculate": "datum.students / datum.level_total * 100", "as": "percentage"},
+    {"calculate": "format(datum.percentage, '.1f') + '%'", "as": "percentage_formatted"}
+  ],
+  "resolve": {"scale": {"color": "independent"}},
+  "layer": [
+    {
+      "transform": [
+        {"aggregate": [{"op": "sum", "field": "students", "as": "level_students"}], "groupby": ["level"]}
+      ],
+      "mark": {"type": "arc", "innerRadius": 80, "outerRadius": 180, "stroke": "white", "strokeWidth": 2},
+      "encoding": {
+        "theta": {"field": "level_students", "type": "quantitative", "stack": true},
+        "color": {
+          "field": "level",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Primary", "Secondary", "Post-Secondary"],
+            "range": ["#42A5F5", "#FF9800", "#AB47BC"]
+          },
+          "legend": {"title": "Education Level", "orient": "right"}
+        },
+        "order": {"field": "level", "type": "nominal", "sort": ["Primary", "Secondary", "Post-Secondary"]},
+        "tooltip": [
+          {"field": "level", "type": "nominal", "title": "Level"},
+          {"field": "level_students", "type": "quantitative", "title": "Total Students", "format": ",.0f"}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "arc", "innerRadius": 185, "outerRadius": 270, "stroke": "white", "strokeWidth": 2},
+      "encoding": {
+        "theta": {"field": "students", "type": "quantitative", "stack": true},
+        "color": {
+          "condition": [
+            {"test": "datum.level == 'Primary' && datum.gender == 'Male'", "value": "#1976D2"},
+            {"test": "datum.level == 'Primary' && datum.gender == 'Female'", "value": "#90CAF9"},
+            {"test": "datum.level == 'Secondary' && datum.gender == 'Male'", "value": "#F57C00"},
+            {"test": "datum.level == 'Secondary' && datum.gender == 'Female'", "value": "#FFB74D"},
+            {"test": "datum.level == 'Post-Secondary' && datum.gender == 'Male'", "value": "#7B1FA2"},
+            {"test": "datum.level == 'Post-Secondary' && datum.gender == 'Female'", "value": "#CE93D8"}
+          ],
+          "value": "#ccc"
+        },
+        "order": {
+          "field": "level",
+          "type": "nominal",
+          "sort": ["Primary", "Secondary", "Post-Secondary"]
+        },
+        "tooltip": [
+          {"field": "level", "type": "nominal", "title": "Level"},
+          {"field": "gender", "type": "nominal", "title": "Gender"},
+          {"field": "students_formatted", "type": "nominal", "title": "Students"},
+          {"field": "percentage_formatted", "type": "nominal", "title": "% of Level"}
+        ]
+      }
+    }
+  ]
+}

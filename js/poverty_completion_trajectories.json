@@ -1,0 +1,177 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "State Poverty Rankings: How Positions Changed (2016–2022)",
+    "subtitle": "Lower rank = lower poverty (better). Lines show each state's rank trajectory.",
+    "fontSize": 16,
+    "font": "Arial"
+  },
+  "width": 900,
+  "height": 600,
+  "data": {
+    "url": "data/poverty_completion_joined.csv"
+  },
+  "transform": [
+    {
+      "window": [{"op": "rank", "as": "rank"}],
+      "sort": [{"field": "poverty_absolute", "order": "ascending"}],
+      "groupby": ["year"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": "Year",
+          "axis": {
+            "labelAngle": 0,
+            "labelFontSize": 12,
+            "titleFontSize": 14
+          }
+        },
+        "y": {
+          "field": "rank",
+          "type": "quantitative",
+          "title": "Rank (1 = Lowest Poverty)",
+          "scale": {"domain": [1, 16], "reverse": false},
+          "axis": {
+            "tickCount": 16,
+            "labelFontSize": 11,
+            "titleFontSize": 14
+          }
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "W.P. Putrajaya", "Selangor", "Pulau Pinang", "W.P. Kuala Lumpur", 
+              "Johor", "Melaka", "Negeri Sembilan", "Kedah", "Perak", "Perlis",
+              "Sarawak", "Pahang", "Terengganu", "W.P. Labuan", "Kelantan", "Sabah"
+            ]
+          },
+          "legend": null
+        },
+        "detail": {"field": "state"}
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 100,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "rank", "type": "quantitative"},
+        "color": {"field": "state", "type": "nominal", "legend": null},
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "year", "title": "Year"},
+          {"field": "rank", "title": "Rank"},
+          {"field": "poverty_absolute", "format": ".1f", "title": "Poverty (%)"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "transform": [
+        {"filter": "datum.year == 2022"}
+      ],
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "rank", "type": "quantitative"},
+        "text": {"field": "state"},
+        "color": {"field": "state", "type": "nominal", "legend": null}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "transform": [
+        {"filter": "datum.year == 2016"}
+      ],
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "rank", "type": "quantitative"},
+        "text": {"field": "state"},
+        "color": {"field": "state", "type": "nominal", "legend": null}
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": null},
+    "axis": {
+      "grid": true,
+      "gridOpacity": 0.3
+    }
+  }
+}
+    {
+      "mark": { 
+        "type": "point",
+        "filled": true,
+        "size": 80,
+        "opacity": 0.9
+      },
+      "encoding": {
+        "x": { "field": "poverty_absolute", "type": "quantitative" },
+        "y": { "field": "completion", "type": "quantitative" },
+        "color": { "field": "state", "type": "nominal", "legend": null },
+        "tooltip": [
+          { "field": "state", "title": "State" },
+          { "field": "year", "title": "Year" },
+          { "field": "poverty_absolute", "format": ".1f", "title": "Poverty (%)" },
+          { "field": "completion", "format": ".2f", "title": "Completion (%)" }
+        ]
+      }
+    },
+    {
+      "mark": { 
+        "type": "text",
+        "align": "left",
+        "dx": 6,
+        "dy": -6,
+        "fontSize": 9,
+        "fontWeight": "bold"
+      },
+      "transform": [
+        { "filter": "datum.year == 2016 || datum.year == 2020 || datum.year == 2022" }
+      ],
+      "encoding": {
+        "x": { "field": "poverty_absolute", "type": "quantitative" },
+        "y": { "field": "completion", "type": "quantitative" },
+        "text": { "field": "year" },
+        "color": { "field": "state", "type": "nominal", "legend": null },
+        "opacity": { "value": 0.7 }
+      }
+    }
+  ],
+  "config": {
+    "view": { "stroke": null },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 13,
+      "gridOpacity": 0.3
+    }
+  }
+}

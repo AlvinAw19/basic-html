@@ -1,0 +1,259 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "height": 700,
+  "background": "white",
+  "padding": 10,
+  "projection": {
+    "type": "mercator",
+    "center": [
+      109.5,
+      4.0
+    ],
+    "scale": 2200
+  },
+  "view": {
+    "stroke": "transparent"
+  },
+  "title": {
+    "text": "Number of Teachers by District in Malaysia (2022)",
+    "fontSize": 18,
+    "anchor": "start"
+  },
+  "layer": [
+    {
+      "data": {
+        "sphere": true
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "data": {
+        "graticule": {
+          "step": [
+            2,
+            2
+          ]
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#d7e3ee",
+        "strokeWidth": 0.4
+      }
+    },
+    {
+      "data": {
+        "url": "data/map.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "gadm41_MYS_1"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.properties.NAME_1 == 'KualaLumpur' ? 'W.P. Kuala Lumpur' : datum.properties.NAME_1 == 'NegeriSembilan' ? 'Negeri Sembilan' : datum.properties.NAME_1 == 'PulauPinang' ? 'Pulau Pinang' : datum.properties.NAME_1 == 'Trengganu' ? 'Terengganu' : datum.properties.NAME_1 == 'Putrajaya' ? 'W.P. Putrajaya' : datum.properties.NAME_1 == 'Labuan' ? 'W.P. Labuan' : datum.properties.NAME_1",
+          "as": "state"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.8,
+        "fill": "#d3d3d3"
+      }
+    },
+    {
+      "data": {
+        "url": "data/teachers_aggregated.csv"
+      },
+      "transform": [
+        {
+          "lookup": "district",
+          "from": {
+            "data": {
+              "url": "data/malaysia_district_labelled.csv"
+            },
+            "key": "district",
+            "fields": [
+              "longitude",
+              "latitude"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.6,
+        "stroke": "#ffffff",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude"
+        },
+        "latitude": {
+          "field": "latitude"
+        },
+        "size": {
+          "field": "teachers",
+          "type": "quantitative",
+          "title": "Number of Teachers",
+          "scale": {
+            "range": [50, 1000]
+          },
+          "legend": {
+            "title": "Teachers",
+            "symbolFillColor": "#e07a5f"
+          }
+        },
+        "color": {
+          "value": "#e07a5f"
+        },
+        "tooltip": [
+          {
+            "field": "district",
+            "title": "District"
+          },
+          {
+            "field": "teachers",
+            "title": "Number of Teachers",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "Johor Bahru", "longitude": 103.76, "latitude": 1.46, "teachers": 35008}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 25,
+        "dy": -5,
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "Johor Bahru"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "Johor Bahru", "longitude": 103.76, "latitude": 1.46, "teachers": 35008}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 25,
+        "dy": 7,
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "color": "#666666"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "35,008 teachers"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "W.P. Kuala Lumpur", "longitude": 101.69, "latitude": 3.14, "teachers": 33276}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -50,
+        "dy": -20,
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "Kuala Lumpur"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "W.P. Kuala Lumpur", "longitude": 101.69, "latitude": 3.14, "teachers": 33276}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -50,
+        "dy": -8,
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "color": "#666666"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "33,276 teachers"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "Kota Kinabalu", "longitude": 116.07, "latitude": 5.98, "teachers": 14124}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 20,
+        "dy": 0,
+        "fontSize": 11,
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "Kota Kinabalu"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"district": "Kota Kinabalu", "longitude": 116.07, "latitude": 5.98, "teachers": 14124}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 20,
+        "dy": 12,
+        "fontSize": 9,
+        "fontWeight": "normal",
+        "color": "#666666"
+      },
+      "encoding": {
+        "longitude": {"field": "longitude"},
+        "latitude": {"field": "latitude"},
+        "text": {"value": "Sabah - 14,124 teachers"}
+      }
+    }
+  ],
+  "config": {
+    "legend": {
+      "titleFontSize": 12,
+      "labelFontSize": 11
+    }
+  }
+}

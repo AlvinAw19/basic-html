@@ -1,0 +1,105 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Malaysia State Poverty Rankings Over Time (2016–2022)",
+    "subtitle": "Rank 1 = Lowest Poverty (Best) • Rank 16 = Highest Poverty (Worst)",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "anchor": "start"
+  },
+  "width": 800,
+  "height": 500,
+  "data": {"url": "data/poverty_completion_joined.csv"},
+  "transform": [
+    {
+      "calculate": "toNumber(datum.year)",
+      "as": "year_num"
+    },
+    {
+      "window": [{"op": "rank", "as": "poverty_rank"}],
+      "sort": [{"field": "poverty_absolute", "order": "ascending"}],
+      "groupby": ["year"]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5,
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": "Year",
+          "axis": {"labelAngle": 0}
+        },
+        "y": {
+          "field": "poverty_rank",
+          "type": "quantitative",
+          "title": "Poverty Rank",
+          "scale": {"domain": [0.5, 16.5], "reverse": true},
+          "axis": {"tickMinStep": 1}
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "legend": {"title": "State", "columns": 2}
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "poverty_rank", "type": "quantitative", "title": "Rank"},
+          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 80
+      },
+      "encoding": {
+        "x": {"field": "year", "type": "ordinal"},
+        "y": {"field": "poverty_rank", "type": "quantitative"},
+        "color": {"field": "state", "type": "nominal", "legend": null},
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "poverty_rank", "type": "quantitative", "title": "Rank"},
+          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "data": {"values": [{"x": "2020"}]},
+      "mark": {
+        "type": "rule",
+        "strokeDash": [4, 4],
+        "color": "red",
+        "opacity": 0.5,
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "ordinal"}
+      }
+    },
+    {
+      "data": {"values": [{"x": "2020", "label": "COVID-19 Impact"}]},
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "dy": -250,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "red"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "ordinal"},
+        "text": {"field": "label", "type": "nominal"}
+      }
+    }
+  ]
+}

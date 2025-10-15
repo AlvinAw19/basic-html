@@ -1,0 +1,156 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 900,
+  "height": 700,
+  "background": "white",
+  "padding": 10,
+  "projection": {
+    "type": "mercator",
+    "center": [
+      109.5,
+      4.0
+    ],
+    "scale": 2200
+  },
+  "view": {
+    "stroke": "transparent"
+  },
+  "title": {
+    "text": "Malaysia Upper Secondary School Completion Rates by State (2022)",
+    "fontSize": 18,
+    "anchor": "start"
+  },
+  "layer": [
+    {
+      "data": {
+        "sphere": true
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#ffffff"
+      }
+    },
+    {
+      "data": {
+        "graticule": {
+          "step": [
+            2,
+            2
+          ]
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#d7e3ee",
+        "strokeWidth": 0.4
+      }
+    },
+    {
+      "data": {
+        "url": "data/map.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "gadm41_MYS_1"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "datum.properties.NAME_1 == 'KualaLumpur' ? 'W.P. Kuala Lumpur' : datum.properties.NAME_1 == 'NegeriSembilan' ? 'Negeri Sembilan' : datum.properties.NAME_1 == 'PulauPinang' ? 'Pulau Pinang' : datum.properties.NAME_1 == 'Trengganu' ? 'Terengganu' : datum.properties.NAME_1 == 'Putrajaya' ? 'W.P. Putrajaya' : datum.properties.NAME_1 == 'Labuan' ? 'W.P. Labuan' : datum.properties.NAME_1",
+          "as": "state"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/state_school_completion.csv"
+            },
+            "key": "state",
+            "fields": [
+              "completion",
+              "Rate of Completion"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.completion >= 100.5 ? 'Very High (≥100.5%)' : datum.completion >= 99.5 ? 'High (99.5-100.4%)' : datum.completion >= 98.5 ? 'Medium (98.5-99.4%)' : datum.completion >= 97.5 ? 'Low (97.5-98.4%)' : 'Very Low (<97.5%)'",
+          "as": "completion_category"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "field": "completion_category",
+          "type": "nominal",
+          "title": "Completion Rate Category",
+          "scale": {
+            "domain": [
+              "Very Low (<97.5%)",
+              "Low (97.5-98.4%)",
+              "Medium (98.5-99.4%)",
+              "High (99.5-100.4%)",
+              "Very High (≥100.5%)"
+            ],
+            "range": [
+              "#fee5d9",
+              "#fcbba1",
+              "#fc9272",
+              "#fb6a4a",
+              "#cb181d"
+            ]
+          },
+          "legend": {
+            "orient": "right"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "completion",
+            "title": "Completion Rate (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "completion_category",
+            "title": "Category"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/malaysia_state_labelled.csv"
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "fill": "#1a1a1a"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude"
+        },
+        "latitude": {
+          "field": "latitude"
+        },
+        "text": {
+          "field": "state"
+        }
+      }
+    }
+  ],
+  "config": {
+    "legend": {
+      "titleFontSize": 12,
+      "labelFontSize": 11,
+      "symbolType": "square"
+    }
+  }
+}

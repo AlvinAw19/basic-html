@@ -1,0 +1,89 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Teacher–Student Ratio by State and Level (2022)",
+    "subtitle": "Where are students most underserved? Higher ratio = more students per teacher",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "anchor": "start"
+  },
+  "width": 400,
+  "height": 500,
+  "background": null,
+  "config": {
+    "view": {"stroke": null},
+    "axis": {"grid": false, "labelFontSize": 11}
+  },
+  "data": {"url": "data/enrolment_school_district.csv"},
+  "transform": [
+    {"filter": "datum.district == 'All Districts'"},
+    {"filter": "datum.state != 'Malaysia'"},
+    {"filter": "datum.date == '2022-01-01'"},
+    {"filter": "datum.sex == 'both'"},
+    {"calculate": "datum.stage == 'primary' ? 'Primary' : datum.stage == 'secondary' ? 'Secondary' : 'Post-Secondary'", "as": "level"},
+    {
+      "lookup": "state",
+      "from": {
+        "data": {"url": "data/teachers_district.csv"},
+        "key": "state",
+        "fields": ["teachers"],
+        "transform": [
+          {"filter": "datum.district == 'All Districts'"},
+          {"filter": "datum.date == '2022-01-01'"},
+          {"filter": "datum.sex == 'both'"}
+        ]
+      },
+      "as": ["teachers_lookup"]
+    },
+    {
+      "lookup": "level",
+      "from": {
+        "data": {"url": "data/teachers_district.csv"},
+        "key": "stage",
+        "fields": ["teachers"],
+        "transform": [
+          {"filter": "datum.district == 'All Districts'"},
+          {"filter": "datum.date == '2022-01-01'"},
+          {"filter": "datum.sex == 'both'"},
+          {"calculate": "datum.stage == 'primary' ? 'Primary' : datum.stage == 'secondary' ? 'Secondary' : 'Post-Secondary'", "as": "stage"}
+        ]
+      },
+      "as": ["teachers"]
+    },
+    {"calculate": "datum.students / datum.teachers", "as": "ratio"},
+    {"calculate": "format(datum.ratio, '.1f')", "as": "ratio_formatted"}
+  ],
+  "mark": {"type": "rect", "stroke": "white", "strokeWidth": 2},
+  "encoding": {
+    "x": {
+      "field": "level",
+      "type": "nominal",
+      "title": "Education Level",
+      "axis": {"labelAngle": 0},
+      "sort": ["Primary", "Secondary", "Post-Secondary"]
+    },
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "title": "State",
+      "sort": {"op": "mean", "field": "ratio", "order": "descending"}
+    },
+    "color": {
+      "field": "ratio",
+      "type": "quantitative",
+      "title": "Students per Teacher",
+      "scale": {
+        "scheme": "orangered",
+        "reverse": false
+      },
+      "legend": {"orient": "right", "gradientLength": 300}
+    },
+    "tooltip": [
+      {"field": "state", "type": "nominal", "title": "State"},
+      {"field": "level", "type": "nominal", "title": "Level"},
+      {"field": "ratio_formatted", "type": "nominal", "title": "Ratio"},
+      {"field": "students", "type": "quantitative", "title": "Students", "format": ",.0f"},
+      {"field": "teachers", "type": "quantitative", "title": "Teachers", "format": ",.0f"}
+    ]
+  }
+}

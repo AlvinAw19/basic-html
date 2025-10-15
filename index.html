@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaysia Socioeconomic Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.16.3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.24.0"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Malaysia Socioeconomic Dashboard</h1>
+
+    <section id="education-section">
+      <h2>Malaysia Education Completion Rates by State (2022)</h2>
+      <div id="education_map"></div>
+    </section>
+
+    <section id="poverty-section">
+      <h2>Malaysia State Poverty Rankings Over Time (2016–2022)</h2>
+      <div id="poverty_chart"></div>
+      <div class="chart-caption">
+        <p><strong>Reading the Chart:</strong> Each colored line tracks one state's poverty ranking from 2016 to 2022. Rank 1 (top) = lowest poverty rate (best performance). Rank 16 (bottom) = highest poverty rate (worst performance). The 2020 COVID-19 pandemic caused significant disruptions to poverty rankings across most states.</p>
+      </div>
+    </section>
+
+    <section id="poverty-vs-completion-section">
+      <h2>Poverty Rate vs Completion Rate (2016–2022)</h2>
+      <div id="poverty_vs_completion_chart"></div>
+      <div class="chart-caption">
+        <p>This dual-line chart compares Malaysia's average poverty rate against primary school completion rates over time. Use the brush filter below to select specific year ranges and examine the relationship between economic conditions and educational outcomes.</p>
+      </div>
+    </section>
+
+    <section id="teachers-section">
+      <h2>Teacher Distribution</h2>
+      <div id="teachers_map"></div>
+      <div class="chart-caption">
+        <p><strong>Teachers by District</strong></p>
+        <p>Malaysia has approximately 416,366 teachers distributed across 152 districts in 2022. Urban centers like Johor Bahru (35,008) and Kuala Lumpur (33,276) have the highest concentration, while rural districts show significantly fewer educators, highlighting resource disparities in the education system.</p>
+        <p style="margin-top: 10px;"><strong>Circle size:</strong> Number of teachers</p>
+      </div>
+    </section>
+
+    <section id="school-density-section">
+      <h2>School Density per 100,000 Students by State (2022)</h2>
+      <div id="school_density_chart"></div>
+      <div class="chart-caption">
+        <p><strong>School Infrastructure Distribution</strong></p>
+        <p>This stacked bar chart reveals significant disparities in school infrastructure across Malaysian states. States with higher densities indicate better school accessibility per student population.</p>
+        <p style="margin-top: 10px;"><strong>Top 3 States (Highest Density):</strong></p>
+        <ul style="margin: 5px 0;">
+          <li><strong>Sarawak:</strong> 652.7 schools per 100k students (Primary: 537.6, Secondary: 101.8, Post-Secondary: 13.3)</li>
+          <li><strong>Perak:</strong> 598.3 schools per 100k students (Primary: 424.9, Secondary: 157.7, Post-Secondary: 15.7)</li>
+          <li><strong>Pahang:</strong> 579.4 schools per 100k students (Primary: 358.1, Secondary: 194.5, Post-Secondary: 26.8)</li>
+        </ul>
+        <p style="margin-top: 10px;"><strong>Bottom 3 States (Lowest Density):</strong></p>
+        <ul style="margin: 5px 0;">
+          <li><strong>Pulau Pinang:</strong> 367.1 schools per 100k students</li>
+          <li><strong>Selangor:</strong> 249.9 schools per 100k students</li>
+          <li><strong>W.P. Putrajaya:</strong> 167.3 schools per 100k students</li>
+        </ul>
+        <p style="margin-top: 10px; font-style: italic;">Rural states like Sarawak have higher densities due to dispersed populations requiring more schools, while urban states like Selangor have larger schools serving more students efficiently.</p>
+      </div>
+    </section>
+
+    <section id="enrolment-section">
+      <h2>Education Enrolment Pathway by Gender (2022)</h2>
+      <div id="enrolment_sunburst"></div>
+      <div class="chart-caption">
+        <p><strong>Who continues through the education system?</strong></p>
+        <p>This sunburst chart visualizes gender participation and dropout rates across education levels. The inner ring shows education levels (Primary, Secondary, Post-Secondary), while the outer ring breaks down enrollment by gender.</p>
+        <p style="margin-top: 10px;"><strong>Key Findings:</strong></p>
+        <ul style="margin: 5px 0;">
+          <li><strong>Primary Level:</strong> 2.77M students (51.3% Male, 48.7% Female) - Nearly equal gender participation</li>
+          <li><strong>Secondary Level:</strong> 1.98M students (50.6% Male, 49.4% Female) - Slight decline from primary</li>
+          <li><strong>Post-Secondary Level:</strong> 66.8K students (42.7% Male, 57.3% Female) - Dramatic drop, but females dominate</li>
+        </ul>
+        <p style="margin-top: 10px; font-style: italic;"><strong>Insight:</strong> While primary and secondary enrollment is nearly balanced, post-secondary sees a massive 96.6% dropout from primary levels. Notably, females represent 57.3% of post-secondary students, indicating better continuation rates for female students at higher education levels.</p>
+      </div>
+    </section>
+  </main>
+
+  <script type="text/javascript">
+    // High quality rendering options - use SVG for crisp rendering
+    const vegaOptions = {
+      actions: false,
+      renderer: 'svg',  // SVG renders much sharper than canvas
+      downloadFileName: 'visualization'
+    };
+
+    // Education Completion Map (Week 9)
+    const educationSpec = "js/malaysia_education.json";
+    vegaEmbed('#education_map', educationSpec, vegaOptions).catch(console.error);
+
+    // Poverty Trajectories Chart (Connected Scatter)
+    const povertySpec = "js/bump_chart.json";
+    vegaEmbed('#poverty_chart', povertySpec, vegaOptions).catch(console.error);
+
+    // Poverty vs Completion comparison
+    const povertyVsCompletionSpec = "js/poverty_vs_completion.json";
+    vegaEmbed('#poverty_vs_completion_chart', povertyVsCompletionSpec, vegaOptions).catch(console.error);
+
+    // Teachers District Map
+    const teachersSpec = "js/teachers_district_map.json";
+    vegaEmbed('#teachers_map', teachersSpec, vegaOptions).catch(console.error);
+
+    // School Density Stacked Bar Chart
+    const schoolDensitySpec = "js/school_density_stacked.json";
+    vegaEmbed('#school_density_chart', schoolDensitySpec, vegaOptions).catch(console.error);
+
+    // Enrolment Sunburst Chart
+    const enrolmentSpec = "js/enrolment_sunburst.json?v=" + Date.now();
+    vegaEmbed('#enrolment_sunburst', enrolmentSpec, vegaOptions).catch(console.error);
+  </script>
+</body>
+</html>

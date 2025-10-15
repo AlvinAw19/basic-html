@@ -1,0 +1,95 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Poverty rate vs completion rate (primary, Malaysia).",
+  "title": {
+    "text": "Poverty rate vs Completion rate (Primary) — Malaysia",
+    "fontSize": 16,
+    "font": "Arial"
+  },
+  "height": 300,
+  "width": 900,
+  "resolve": { "scale": { "y": "independent" }, "axis": { "y": "independent" } },
+  "layer": [
+    {
+      "data": { "url": "data/hh_poverty_state.csv" },
+      "transform": [
+        { "calculate": "year(datum.date)", "as": "year" },
+        { "aggregate": [{ "op": "mean", "field": "poverty_absolute", "as": "poverty" }], "groupby": ["year"] },
+        { "filter": "datum.poverty != null" },
+        { "filter": "datum.year >= 2016" }
+      ],
+      "mark": { "type": "line", "color": "#e74c3c", "strokeWidth": 3, "point": true },
+      "encoding": {
+        "x": { 
+          "field": "year", 
+          "type": "quantitative", 
+          "scale": { "domain": [2016, 2022] },
+          "axis": { "title": "Year", "labelAngle": 0, "format": "d" } 
+        },
+        "y": { 
+          "field": "poverty", 
+          "type": "quantitative", 
+          "axis": { "title": "Poverty rate (%)", "titleColor": "#e74c3c" } 
+        },
+        "tooltip": [ 
+          { "field": "year", "title": "Year" }, 
+          { "field": "poverty", "title": "Poverty (%)", "format": ".2f" } 
+        ]
+      }
+    },
+    {
+      "data": { "url": "data/completion_school_state.csv" },
+      "transform": [
+        { "filter": "datum.state == 'Malaysia' && datum.stage == 'primary' && datum.sex == 'both'" },
+        { "calculate": "year(datum.date)", "as": "year" },
+        { "aggregate": [{ "op": "mean", "field": "completion", "as": "completion" }], "groupby": ["year"] },
+        { "filter": "datum.completion != null" }
+      ],
+      "mark": { "type": "line", "color": "#3498db", "strokeWidth": 3, "point": true },
+      "encoding": {
+        "x": { 
+          "field": "year", 
+          "type": "quantitative",
+          "scale": { "domain": [2016, 2022] }
+        },
+        "y": { 
+          "field": "completion", 
+          "type": "quantitative",
+          "scale": { "domain": [95, 100] },
+          "axis": { "title": "Completion rate (%)", "orient": "right", "titleColor": "#3498db" } 
+        },
+        "tooltip": [ 
+          { "field": "year", "title": "Year" }, 
+          { "field": "completion", "title": "Completion (%)", "format": ".2f" } 
+        ]
+      }
+    },
+    {
+      "data": { "values": [ { "year": 2020, "label": "COVID-19" } ] },
+      "mark": { "type": "rule", "color": "#999", "strokeDash": [4,4], "strokeWidth": 1.5 },
+      "encoding": {
+        "x": { "field": "year", "type": "quantitative" }
+      }
+    },
+    {
+      "data": { "values": [ { "year": 2020, "label": "COVID-19", "completion": 99 } ] },
+      "mark": { "type": "text", "align": "left", "dx": 5, "fontSize": 11, "color": "#666", "fontWeight": "bold" },
+      "encoding": {
+        "x": { "field": "year", "type": "quantitative" },
+        "y": { "field": "completion", "type": "quantitative", "scale": { "domain": [95, 100] }, "axis": null },
+        "text": { "field": "label" }
+      }
+    }
+  ],
+  "config": {
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial",
+      "labelFontSize": 11,
+      "titleFontSize": 13
+    },
+    "title": {
+      "font": "Arial"
+    }
+  }
+}

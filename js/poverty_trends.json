@@ -1,0 +1,276 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Malaysia Poverty Trends by State (2002–2022)",
+    "fontSize": 16,
+    "font": "Arial",
+    "anchor": "start"
+  },
+  "width": 1000,
+  "height": 600,
+  "background": "white",
+  "padding": 10,
+  "data": {
+    "url": "data/hh_poverty_state.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.poverty_absolute != null && datum.poverty_absolute != ''"
+    },
+    {
+      "calculate": "toNumber(substring(datum.date, 0, 4))",
+      "as": "year"
+    },
+    {
+      "filter": "datum.year >= 2002"
+    },
+    {
+      "filter": "state_selection == 'All States' || datum.state == state_selection"
+    }
+  ],
+  "params": [
+    {
+      "name": "state_selection",
+      "value": "All States",
+      "bind": {
+        "input": "select",
+        "options": [
+          "All States",
+          "Johor",
+          "Kedah",
+          "Kelantan",
+          "Melaka",
+          "Negeri Sembilan",
+          "Pahang",
+          "Perak",
+          "Perlis",
+          "Pulau Pinang",
+          "Sabah",
+          "Sarawak",
+          "Selangor",
+          "Terengganu",
+          "W.P. Kuala Lumpur",
+          "W.P. Labuan",
+          "W.P. Putrajaya"
+        ],
+        "name": "Select State: "
+      }
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "line", "strokeWidth": 1.5, "point": true},
+      "encoding": {
+        "x": {
+        "field": "year",
+        "type": "quantitative",
+        "title": "Year (2002–2022)",
+        "scale": {"domain": [2002, 2022], "type": "linear", "nice": false, "zero": false},
+        "axis": {
+            "format": "d",
+            "grid": true,
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "tickMinStep": 1,
+            "tickCount": 21,
+            "labelFlush": false,
+            "labelAlign": "center"
+        }
+        },
+        "y": {
+          "field": "poverty_absolute",
+          "type": "quantitative",
+          "title": "Absolute Poverty Rate (%)",
+          "axis": {
+            "grid": true,
+            "labelFontSize": 12,
+            "titleFontSize": 14
+          }
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", "Sarawak", "Selangor", "Terengganu", "W.P. Kuala Lumpur", "W.P. Labuan", "W.P. Putrajaya"],
+            "range": ["#1f77b4", "#ff7f0e", "#984ea3", "#a65628", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#aec7e8", "#ffbb78", "#f781bf", "#ffff33", "#c5b0d5", "#c49c94"]
+          },
+          "legend": {
+            "title": "State",
+            "titleFontSize": 14,
+            "labelFontSize": 12,
+            "orient": "right",
+            "columns": 2
+          }
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "year", "type": "quantitative", "title": "Year"},
+          {"field": "poverty_absolute", "type": "quantitative", "title": "Absolute Poverty Rate (%)", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#1f77b4",
+        "strokeWidth": 2,
+        "strokeDash": [5, 5],
+        "opacity": 0.7
+      },
+      "encoding": {
+        "y": {"datum": 15},
+        "tooltip": {"value": "15% Poverty Target (11th Malaysia Plan)"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "bottom",
+        "dx": 125,
+        "dy": -5,
+        "fontSize": 12,
+        "fontWeight": "normal",
+        "color": "#1f77b4"
+      },
+      "encoding": {
+        "x": {"datum": 2000},
+        "y": {"datum": 15},
+        "text": {"value": "15% Poverty Target"}
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#984ea3",
+        "strokeWidth": 2,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {"datum": 2009},
+        "tooltip": {"value": "2009: ETP – Economic Transformation Programme (Boost growth and create higher-income jobs)"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dx": 0,
+        "dy": 8,
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "color": "#984ea3"
+      },
+      "encoding": {
+        "x": {"datum": 2009},
+        "y": {"datum": 35},
+        "text": {"value": "2009 ETP"}
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#ff7f0e",
+        "strokeWidth": 2,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {"datum": 2010},
+        "tooltip": {"value": "2010: NEM – New Economic Model (Inclusive and sustainable growth)"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dx": 0,
+        "dy": -8,
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "color": "#ff7f0e"
+      },
+      "encoding": {
+        "x": {"datum": 2010},
+        "y": {"datum": 20},
+        "text": {"value": "2010 NEM"}
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#17becf",
+        "strokeWidth": 2,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {"datum": 2015},
+        "tooltip": {"value": "2015: 11MP – Eleventh Malaysia Plan (People-centered development and poverty reduction)"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dx": 0,
+        "dy": 8,
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "color": "#17becf"
+      },
+      "encoding": {
+        "x": {"datum": 2015},
+        "y": {"datum": 25},
+        "text": {"value": "2015 11MP"}
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#a65628",
+        "strokeWidth": 2,
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {"datum": 2020},
+        "tooltip": {"value": "2020: COVID-19 Pandemic (Economic shock, poverty spike)"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dx": 0,
+        "dy": 8,
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "color": "#a65628"
+      },
+      "encoding": {
+        "x": {"datum": 2020},
+        "y": {"datum": 40},
+        "text": {"value": "2020 COVID-19"}
+      }
+    }
+  ],
+  "config": {
+    "legend": {
+      "titleFontSize": 14,
+      "labelFontSize": 12,
+      "symbolSize": 100
+    },
+    "axis": {
+      "labelFontSize": 12,
+      "titleFontSize": 14,
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    },
+    "title": {
+      "fontSize": 16,
+      "font": "Arial"
+    }
+  }
+}

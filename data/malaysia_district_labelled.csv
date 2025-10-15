@@ -1,0 +1,152 @@
+district,longitude,latitude
+Batu Pahat,102.93,1.85
+Johor Bahru,103.76,1.46
+Kluang,103.32,2.03
+Kota Tinggi,103.90,1.74
+Kulai,103.60,1.66
+Mersing,103.84,2.43
+Muar,102.57,2.04
+Pontian,103.39,1.49
+Segamat,102.82,2.50
+Tangkak,102.55,2.27
+Baling,100.92,5.67
+Bandar Baharu,100.48,5.13
+Kota Setar,100.37,6.12
+Kuala Muda,100.43,5.65
+Kubang Pasu,100.28,6.22
+Kulim,100.55,5.37
+Langkawi,99.78,6.35
+Padang Terap,100.63,6.02
+Pendang,100.48,5.98
+Pokok Sena,100.63,5.92
+Sik,100.73,5.81
+Yan,100.37,5.80
+Bachok,102.40,6.07
+Gua Musang,101.97,4.88
+Jeli,101.85,5.70
+Kecil Lojing,101.35,4.68
+Kota Bharu,102.24,6.13
+Kuala Krai,102.20,5.53
+Machang,102.22,5.77
+Pasir Mas,102.14,6.05
+Pasir Puteh,102.41,5.83
+Tanah Merah,102.15,5.80
+Tumpat,102.17,6.20
+Alor Gajah,102.21,2.38
+Jasin,102.43,2.31
+Melaka Tengah,102.25,2.20
+Jelebu,102.10,2.96
+Jempol,102.41,2.81
+Kuala Pilah,102.25,2.74
+Port Dickson,101.80,2.52
+Rembau,102.10,2.59
+Seremban,101.94,2.73
+Tampin,102.23,2.47
+Bentong,101.91,3.52
+Bera,102.42,3.33
+Cameron Highlands,101.38,4.47
+Jerantut,102.36,3.94
+Kuala Lipis,102.04,4.18
+Kuantan,103.33,3.82
+Lipis,101.85,4.48
+Maran,102.77,3.59
+Pekan,103.40,3.49
+Raub,101.86,3.79
+Rompin,102.98,2.77
+Temerloh,102.42,3.45
+Tenggara,103.10,3.62
+Hilir Perak,100.85,3.92
+Hulu Perak,101.33,4.18
+Kerian,100.67,4.74
+Kinta,101.12,4.35
+Kuala Kangsar,100.93,4.77
+Larut Matang,100.63,4.85
+Manjung,100.66,4.19
+Perak Tengah,100.98,4.18
+Selama,100.70,5.22
+Bagan Datuk,100.78,3.99
+Batang Padang,101.22,4.48
+Muallim,101.27,4.23
+Seberang Perai Selatan,100.43,5.11
+Seberang Perai Tengah,100.38,5.40
+Seberang Perai Utara,100.48,5.64
+Barat Daya,100.18,5.29
+Timur Laut,100.35,5.69
+Kuala Lumpur,101.69,3.14
+W.P. Kuala Lumpur,101.69,3.14
+Putrajaya,101.69,2.93
+Labuan,115.25,5.28
+Kota Kinabalu,116.07,5.98
+Kota Belud,116.43,6.35
+Kota Marudu,116.07,6.49
+Kudat,116.85,6.89
+Papar,115.93,5.73
+Penampang,116.12,5.91
+Putatan,116.05,5.88
+Ranau,116.66,5.95
+Sandakan,118.12,5.84
+Tawau,117.89,4.24
+Lahad Datu,118.33,5.03
+Semporna,118.61,4.48
+Kinabatangan,117.55,5.59
+Beluran,117.59,5.90
+Tongod,116.47,5.00
+Keningau,116.16,5.34
+Tambunan,116.36,5.66
+Sipitang,115.55,5.08
+Tenom,115.94,5.13
+Beaufort,115.75,5.35
+Kuala Penyu,115.58,5.58
+Nabawan,115.67,5.10
+Kunak,118.29,4.68
+Telupid,117.12,5.63
+Bintulu,113.04,3.17
+Kapit,112.94,2.01
+Kuching,110.35,1.55
+Limbang,115.00,4.75
+Miri,114.01,4.40
+Samarahan,110.48,1.43
+Sarikei,111.52,2.13
+Sibu,111.83,2.29
+Sri Aman,111.03,1.24
+Betong,111.55,1.40
+Dalat,113.90,3.71
+Daro,113.75,3.35
+Julau,112.29,2.02
+Kanowit,112.14,2.10
+Lawas,115.41,4.86
+Lubok Antu,112.18,1.32
+Lundu,109.85,1.67
+Matu,113.76,2.88
+Mukah,112.09,2.89
+Pakan,112.52,2.04
+Saratok,111.75,1.73
+Selangau,111.15,2.52
+Serian,110.58,1.17
+Simunjan,111.03,1.32
+Song,112.02,2.01
+Tanjung Manis,113.08,2.78
+Tatau,112.93,2.88
+Asajaya,110.57,1.55
+Bau,110.15,1.42
+Belaga,113.78,2.70
+Beluru,114.16,3.37
+Kabong,115.18,4.62
+Marudi,114.32,4.18
+Matu-Daro,113.83,3.05
+Meradong,110.48,1.91
+Pusa,113.95,3.23
+Saratok,111.75,1.73
+Sebauh,110.52,1.57
+Sebuyau,110.43,1.51
+Tanjung Kidurong,113.28,3.00
+Tebedu,110.35,1.02
+Telang Usan,115.57,4.13
+Kuala Terengganu,103.14,5.33
+Hulu Terengganu,102.66,5.02
+Marang,103.21,5.21
+Setiu,102.70,5.61
+Kemaman,103.27,4.24
+Dungun,103.42,4.76
+Besut,102.55,5.83
+Kuala Nerus,102.99,5.37

@@ -1,0 +1,194 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "School Density per 100,000 Students by State (2022)",
+    "fontSize": 18,
+    "font": "Arial",
+    "anchor": "start"
+  },
+  "width": 900,
+  "height": 550,
+  "background": "white",
+  "padding": 10,
+  "data": {
+    "values": [
+      {"state": "Sarawak", "stage": "Primary", "density": 537.57, "rank": 1},
+      {"state": "Sarawak", "stage": "Secondary", "density": 101.76, "rank": 1},
+      {"state": "Sarawak", "stage": "Post-Secondary", "density": 13.33, "rank": 1},
+      {"state": "Perak", "stage": "Primary", "density": 424.85, "rank": 2},
+      {"state": "Perak", "stage": "Secondary", "density": 157.74, "rank": 2},
+      {"state": "Perak", "stage": "Post-Secondary", "density": 15.68, "rank": 2},
+      {"state": "Pahang", "stage": "Primary", "density": 358.12, "rank": 3},
+      {"state": "Pahang", "stage": "Secondary", "density": 194.46, "rank": 3},
+      {"state": "Pahang", "stage": "Post-Secondary", "density": 26.77, "rank": 3},
+      {"state": "Kedah", "stage": "Primary", "density": 290.68, "rank": 8},
+      {"state": "Kedah", "stage": "Secondary", "density": 142.07, "rank": 8},
+      {"state": "Kedah", "stage": "Post-Secondary", "density": 20.24, "rank": 8},
+      {"state": "Johor", "stage": "Primary", "density": 274.15, "rank": 10},
+      {"state": "Johor", "stage": "Secondary", "density": 119.08, "rank": 10},
+      {"state": "Johor", "stage": "Post-Secondary", "density": 28.83, "rank": 10},
+      {"state": "Pulau Pinang", "stage": "Primary", "density": 208.34, "rank": 13},
+      {"state": "Pulau Pinang", "stage": "Secondary", "density": 129.85, "rank": 13},
+      {"state": "Pulau Pinang", "stage": "Post-Secondary", "density": 28.95, "rank": 13},
+      {"state": "Selangor", "stage": "Primary", "density": 120.48, "rank": 15},
+      {"state": "Selangor", "stage": "Secondary", "density": 75.88, "rank": 15},
+      {"state": "Selangor", "stage": "Post-Secondary", "density": 53.48, "rank": 15},
+      {"state": "W.P. Putrajaya", "stage": "Primary", "density": 71.10, "rank": 16},
+      {"state": "W.P. Putrajaya", "stage": "Secondary", "density": 96.19, "rank": 16},
+      {"state": "W.P. Putrajaya", "stage": "Post-Secondary", "density": 0.0, "rank": 16}
+    ]
+  },
+  "transform": [
+    {
+      "filter": "datum.stage != 'Post-Secondary'"
+    },
+    {
+      "joinaggregate": [{"op": "sum", "field": "density", "as": "total_ps2"}],
+      "groupby": ["state"]
+    },
+    {
+      "calculate": "datum.total_ps2",
+      "as": "total_density"
+    },
+    {
+      "sort": [{"field": "total_density", "order": "descending"}, {"field": "state"}, {"field": "stage"}]
+    },
+    {
+      "window": [{"op": "rank", "as": "rank_by_total"}],
+      "frame": [null, null],
+      "sort": [{"field": "total_density", "order": "descending"}]
+    },
+    {
+      "calculate": "datum.rank <= 3 ? 'Top 3' : (datum.rank >= 14 ? 'Bottom 3' : 'Middle')",
+      "as": "category"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "sort": ["Sarawak", "Perak", "Pahang", "Kedah", "Johor", "Pulau Pinang", "Selangor", "W.P. Putrajaya"],
+      "axis": {
+        "labelFontSize": 13,
+        "labelFont": "Arial",
+        "labelFontWeight": {
+          "condition": {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "bold"},
+          "value": "normal"
+        },
+        "labelColor": {
+          "condition": {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "#2c3e50"},
+          "value": "#666666"
+        }
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "x": {
+          "field": "density",
+          "type": "quantitative",
+          "title": "Schools per 100,000 Students",
+          "axis": {
+            "labelFontSize": 12,
+            "titleFontSize": 14,
+            "labelFont": "Arial",
+            "titleFont": "Arial",
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "stage",
+          "type": "nominal",
+          "title": "School Stage",
+          "scale": {
+            "domain": ["Primary", "Secondary"],
+            "range": ["#3498db", "#e74c3c"]
+          },
+          "legend": {
+            "orient": "right",
+            "offset": 20,
+            "titleFontSize": 13,
+            "labelFontSize": 12,
+            "symbolSize": 150
+          }
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang'",
+            "value": 1
+          },
+          "value": 0.45
+        },
+        "stroke": {
+          "condition": {"test": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang'", "value": "#2c3e50"},
+          "value": "#e0e0e0"
+        },
+        "strokeWidth": {"value": 0.8},
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "stage", "title": "Stage"},
+          {"field": "density", "title": "Schools per 100k", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#2c3e50"
+      },
+      "transform": [
+        {
+          "aggregate": [{"op": "sum", "field": "density", "as": "total"}],
+          "groupby": ["state"]
+        },
+        {
+          "filter": "datum.rank_by_total <= 3"
+        }
+      ],
+      "encoding": {
+        "x": {"field": "total", "type": "quantitative"},
+        "text": {"field": "total", "type": "quantitative", "format": ".1f"}
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "color": "#666666"
+      },
+      "transform": [
+        {
+          "aggregate": [{"op": "sum", "field": "density", "as": "total"}],
+          "groupby": ["state"]
+        },
+        {
+          "filter": "datum.rank_by_total >= 6"
+        }
+      ],
+      "encoding": {
+        "x": {"field": "total", "type": "quantitative"},
+        "text": {"field": "total", "type": "quantitative", "format": ".1f"}
+      }
+    }
+  ],
+  "config": {
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    },
+    "title": {
+      "font": "Arial"
+    }
+  }
+}
