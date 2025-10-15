@@ -1,0 +1,49 @@
+state,level,ratio,students,teachers
+Johor,Primary,12.4,331205,26783
+Johor,Secondary,10.9,238547,21826
+Johor,Post-Secondary,0.9,5821,6631
+Kedah,Primary,13.1,292479,22285
+Kedah,Secondary,11.2,208719,18644
+Kedah,Post-Secondary,1.0,5273,5082
+Kelantan,Primary,13.5,268095,19814
+Kelantan,Secondary,11.6,189654,16308
+Kelantan,Post-Secondary,1.1,3799,3506
+Melaka,Primary,12.1,107721,8887
+Melaka,Secondary,10.5,81247,7773
+Melaka,Post-Secondary,0.8,2686,3314
+Negeri Sembilan,Primary,12.5,143816,11483
+Negeri Sembilan,Secondary,10.7,105384,9829
+Negeri Sembilan,Post-Secondary,0.9,2789,3195
+Pahang,Primary,12.8,214863,16809
+Pahang,Secondary,11.0,154234,14006
+Pahang,Post-Secondary,1.0,4086,4196
+Perak,Primary,12.6,283619,22482
+Perak,Secondary,10.8,204788,18960
+Perak,Post-Secondary,0.9,5447,5895
+Perlis,Primary,12.3,33026,2681
+Perlis,Secondary,10.9,24070,2208
+Perlis,Post-Secondary,0.8,772,946
+Pulau Pinang,Primary,12.2,218557,17891
+Pulau Pinang,Secondary,10.6,160753,15133
+Pulau Pinang,Post-Secondary,0.9,4365,4985
+Sabah,Primary,13.0,492031,37855
+Sabah,Secondary,11.4,340768,29834
+Sabah,Post-Secondary,1.0,9021,9274
+Sarawak,Primary,12.9,379062,29452
+Sarawak,Secondary,11.3,272586,24125
+Sarawak,Post-Secondary,1.0,9187,9446
+Selangor,Primary,12.0,806449,67407
+Selangor,Secondary,10.4,596754,57125
+Selangor,Post-Secondary,0.9,14517,16788
+Terengganu,Primary,13.2,190426,14436
+Terengganu,Secondary,11.4,135866,11877
+Terengganu,Post-Secondary,1.0,2867,2845
+W.P. Kuala Lumpur,Primary,11.8,196548,16639
+W.P. Kuala Lumpur,Secondary,10.2,149091,14585
+W.P. Kuala Lumpur,Post-Secondary,0.8,4327,5328
+W.P. Labuan,Primary,12.7,15021,1181
+W.P. Labuan,Secondary,11.1,10832,975
+W.P. Labuan,Post-Secondary,0.9,288,315
+W.P. Putrajaya,Primary,11.5,13072,1136
+W.P. Putrajaya,Secondary,9.8,9630,985
+W.P. Putrajaya,Post-Secondary,0.7,207,294

@@ -81,6 +81,24 @@
         <p style="margin-top: 10px; font-style: italic;"><strong>Insight:</strong> While primary and secondary enrollment is nearly balanced, post-secondary sees a massive 96.6% dropout from primary levels. Notably, females represent 57.3% of post-secondary students, indicating better continuation rates for female students at higher education levels.</p>
       </div>
     </section>
+
+    <section id="teacher-ratio-section">
+      <h2>Teacher–Student Ratio by State and Level (2022)</h2>
+      <div id="teacher_ratio_heatmap"></div>
+      <div class="chart-caption">
+        <p><strong>Where are students most underserved?</strong></p>
+        <p>This heatmap reveals the teacher-student ratio across Malaysian states for primary and secondary education. Darker colors indicate higher ratios (more students per teacher), suggesting greater pressure on teachers and potentially underserved students.</p>
+        <p style="margin-top: 10px;"><strong>Key Observations:</strong></p>
+        <ul style="margin: 5px 0;">
+          <li><strong>Primary education has the highest ratios</strong> (~12-13.5 students per teacher) compared to secondary (~10-11.6)</li>
+          <li><strong>Kelantan Primary shows the highest pressure</strong> (13.5 students per teacher)</li>
+          <li><strong>W.P. Putrajaya Secondary has the lowest ratio</strong> (9.8 students per teacher)</li>
+          <li><strong>East Malaysian states (Sabah, Sarawak)</strong> maintain moderate ratios despite geographic challenges</li>
+          <li><strong>Federal territories generally perform better</strong>, especially at secondary level</li>
+        </ul>
+        <p style="margin-top: 10px; font-style: italic;"><strong>Impact:</strong> Higher ratios indicate potential resource constraints where teachers must serve more students, which may impact education quality, individual attention, and teacher burnout rates. States with ratios above 13 may benefit from targeted teacher recruitment.</p>
+      </div>
+    </section>
   </main>
 
   <script type="text/javascript">
@@ -114,6 +132,10 @@
     // Enrolment Sunburst Chart
     const enrolmentSpec = "js/enrolment_sunburst.json?v=" + Date.now();
     vegaEmbed('#enrolment_sunburst', enrolmentSpec, vegaOptions).catch(console.error);
+
+    // Teacher-Student Ratio Heatmap
+    const teacherRatioSpec = "js/teacher_student_ratio_heatmap.json";
+    vegaEmbed('#teacher_ratio_heatmap', teacherRatioSpec, vegaOptions).catch(console.error);
   </script>
 </body>
 </html>

@@ -2,88 +2,95 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Teacher–Student Ratio by State and Level (2022)",
-    "subtitle": "Where are students most underserved? Higher ratio = more students per teacher",
+    "subtitle": "Where are students most underserved? Darker colors = more students per teacher",
     "fontSize": 18,
     "subtitleFontSize": 12,
     "anchor": "start"
   },
-  "width": 400,
+  "width": 450,
   "height": 500,
   "background": null,
   "config": {
     "view": {"stroke": null},
     "axis": {"grid": false, "labelFontSize": 11}
   },
-  "data": {"url": "data/enrolment_school_district.csv"},
+  "data": {"url": "data/teacher_student_ratio.csv"},
   "transform": [
-    {"filter": "datum.district == 'All Districts'"},
-    {"filter": "datum.state != 'Malaysia'"},
-    {"filter": "datum.date == '2022-01-01'"},
-    {"filter": "datum.sex == 'both'"},
-    {"calculate": "datum.stage == 'primary' ? 'Primary' : datum.stage == 'secondary' ? 'Secondary' : 'Post-Secondary'", "as": "level"},
-    {
-      "lookup": "state",
-      "from": {
-        "data": {"url": "data/teachers_district.csv"},
-        "key": "state",
-        "fields": ["teachers"],
-        "transform": [
-          {"filter": "datum.district == 'All Districts'"},
-          {"filter": "datum.date == '2022-01-01'"},
-          {"filter": "datum.sex == 'both'"}
-        ]
-      },
-      "as": ["teachers_lookup"]
-    },
-    {
-      "lookup": "level",
-      "from": {
-        "data": {"url": "data/teachers_district.csv"},
-        "key": "stage",
-        "fields": ["teachers"],
-        "transform": [
-          {"filter": "datum.district == 'All Districts'"},
-          {"filter": "datum.date == '2022-01-01'"},
-          {"filter": "datum.sex == 'both'"},
-          {"calculate": "datum.stage == 'primary' ? 'Primary' : datum.stage == 'secondary' ? 'Secondary' : 'Post-Secondary'", "as": "stage"}
-        ]
-      },
-      "as": ["teachers"]
-    },
-    {"calculate": "datum.students / datum.teachers", "as": "ratio"},
+    {"filter": "datum.level != 'Post-Secondary'"},
     {"calculate": "format(datum.ratio, '.1f')", "as": "ratio_formatted"}
   ],
-  "mark": {"type": "rect", "stroke": "white", "strokeWidth": 2},
-  "encoding": {
-    "x": {
-      "field": "level",
-      "type": "nominal",
-      "title": "Education Level",
-      "axis": {"labelAngle": 0},
-      "sort": ["Primary", "Secondary", "Post-Secondary"]
+  "layer": [
+    {
+      "mark": {"type": "rect", "stroke": "#ddd", "strokeWidth": 1},
+      "encoding": {
+        "x": {
+          "field": "level",
+          "type": "nominal",
+          "title": "Education Level",
+          "axis": {"labelAngle": 0, "labelFontSize": 12, "titleFontSize": 13},
+          "sort": ["Primary", "Secondary", "Post-Secondary"]
+        },
+        "y": {
+          "field": "state",
+          "type": "nominal",
+          "title": "State",
+          "axis": {"labelFontSize": 11, "titleFontSize": 13},
+          "sort": {"op": "mean", "field": "ratio", "order": "descending"}
+        },
+        "color": {
+          "field": "ratio",
+          "type": "quantitative",
+          "title": ["Students per Teacher", "(Darker = Higher Pressure)"],
+          "scale": {
+            "scheme": "yelloworangered",
+            "domain": [9, 14],
+            "range": ["#ffffb2", "#fecc5c", "#fd8d3c", "#f03b20", "#bd0026"]
+          },
+          "legend": {
+            "orient": "right",
+            "gradientLength": 300,
+            "titleFontSize": 12,
+            "labelFontSize": 11
+          }
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "level", "type": "nominal", "title": "Level"},
+          {"field": "ratio_formatted", "type": "nominal", "title": "Student:Teacher Ratio"},
+          {"field": "students", "type": "quantitative", "title": "Students", "format": ",.0f"},
+          {"field": "teachers", "type": "quantitative", "title": "Teachers", "format": ",.0f"}
+        ]
+      }
     },
-    "y": {
-      "field": "state",
-      "type": "nominal",
-      "title": "State",
-      "sort": {"op": "mean", "field": "ratio", "order": "descending"}
-    },
-    "color": {
-      "field": "ratio",
-      "type": "quantitative",
-      "title": "Students per Teacher",
-      "scale": {
-        "scheme": "orangered",
-        "reverse": false
-      },
-      "legend": {"orient": "right", "gradientLength": 300}
-    },
-    "tooltip": [
-      {"field": "state", "type": "nominal", "title": "State"},
-      {"field": "level", "type": "nominal", "title": "Level"},
-      {"field": "ratio_formatted", "type": "nominal", "title": "Ratio"},
-      {"field": "students", "type": "quantitative", "title": "Students", "format": ",.0f"},
-      {"field": "teachers", "type": "quantitative", "title": "Teachers", "format": ",.0f"}
-    ]
-  }
+    {
+      "mark": {"type": "text", "fontSize": 11, "fontWeight": "bold"},
+      "encoding": {
+        "x": {
+          "field": "level",
+          "type": "nominal",
+          "sort": ["Primary", "Secondary", "Post-Secondary"]
+        },
+        "y": {
+          "field": "state",
+          "type": "nominal",
+          "sort": {"op": "mean", "field": "ratio", "order": "descending"}
+        },
+        "text": {"field": "ratio_formatted", "type": "nominal"},
+        "color": {
+          "condition": {
+            "test": "datum.ratio >= 13.4 || datum.ratio <= 10.0",
+            "value": "#ffffff"
+          },
+          "value": "transparent"
+        },
+        "opacity": {
+          "condition": {
+            "test": "datum.ratio >= 13.4 || datum.ratio <= 10.0",
+            "value": 1
+          },
+          "value": 0
+        }
+      }
+    }
+  ]
 }
