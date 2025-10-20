@@ -2,104 +2,168 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Malaysia State Poverty Rankings Over Time (2016–2022)",
-    "subtitle": "Rank 1 = Lowest Poverty (Best) • Rank 16 = Highest Poverty (Worst)",
+    "subtitle": "Rank 1 = Lowest Poverty (Best) • Click legend to compare states",
     "fontSize": 18,
     "subtitleFontSize": 12,
     "anchor": "start"
   },
-  "width": 800,
+  "width": 550,
   "height": 500,
-  "data": {"url": "data/poverty_completion_joined.csv"},
-  "transform": [
+  "data": {"url": "data/poverty_rankings_enhanced.csv"},
+  "params": [
     {
-      "calculate": "toNumber(datum.year)",
-      "as": "year_num"
-    },
-    {
-      "window": [{"op": "rank", "as": "poverty_rank"}],
-      "sort": [{"field": "poverty_absolute", "order": "ascending"}],
-      "groupby": ["year"]
+      "name": "state_select",
+      "select": {"type": "point", "fields": ["state"]},
+      "bind": "legend"
     }
   ],
   "layer": [
     {
+      "mark": {"type": "rect", "opacity": 0.15, "color": "#ffc107"},
+      "data": {"values": [{"year_start": 2019.5, "year_end": 2020.5}]},
+      "encoding": {
+        "x": {"field": "year_start", "type": "quantitative", "scale": {"domain": [2016, 2022]}},
+        "x2": {"field": "year_end"},
+        "y": {"value": 0},
+        "y2": {"value": 500}
+      }
+    },
+    {
       "mark": {
         "type": "line",
-        "strokeWidth": 2.5,
-        "opacity": 0.7
+        "strokeWidth": 3,
+        "point": {"size": 100, "filled": true}
       },
       "encoding": {
         "x": {
           "field": "year",
-          "type": "ordinal",
+          "type": "quantitative",
           "title": "Year",
-          "axis": {"labelAngle": 0}
+          "scale": {"domain": [2016, 2022]},
+          "axis": {
+            "labelAngle": 0,
+            "values": [2016, 2018, 2020, 2022],
+            "tickCount": 4,
+            "format": "d"
+          }
         },
         "y": {
           "field": "poverty_rank",
           "type": "quantitative",
-          "title": "Poverty Rank",
-          "scale": {"domain": [0.5, 16.5], "reverse": true},
+          "title": "Poverty Rank (Lower is Better)",
+          "scale": {"domain": [0.5, 17.5], "reverse": true},
           "axis": {"tickMinStep": 1}
         },
         "color": {
           "field": "state",
           "type": "nominal",
-          "legend": {"title": "State", "columns": 2}
+          "scale": {
+            "domain": ["Selangor", "W.P. Putrajaya", "Malaysia (Average)", "Sabah", "Kelantan"],
+            "range": ["#1f77b4", "#ff7f0e", "#2ca02c", "#9467bd", "#8c564b"]
+          },
+          "legend": {
+            "title": "Select States to Compare",
+            "orient": "bottom",
+            "direction": "horizontal",
+            "columns": 3,
+            "titleFontSize": 12,
+            "labelFontSize": 11
+          }
+        },
+        "opacity": {
+          "condition": [
+            {"param": "state_select", "empty": false, "value": 1},
+            {"test": "datum.category == 'featured'", "value": 1}
+          ],
+          "value": 0.15
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.state == 'Malaysia (Average)'",
+            "value": 4
+          },
+          "value": 3
+        },
+        "strokeDash": {
+          "condition": {
+            "test": "datum.state == 'Malaysia (Average)'",
+            "value": [5, 5]
+          },
+          "value": [0]
         },
         "tooltip": [
           {"field": "state", "type": "nominal", "title": "State"},
-          {"field": "year", "type": "ordinal", "title": "Year"},
+          {"field": "year", "type": "quantitative", "title": "Year", "format": "d"},
           {"field": "poverty_rank", "type": "quantitative", "title": "Rank"},
-          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
+          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".1f"}
         ]
       }
     },
     {
       "mark": {
-        "type": "point",
-        "filled": true,
-        "size": 80
+        "type": "text",
+        "align": "left",
+        "dx": 8,
+        "fontSize": 11,
+        "fontWeight": "bold"
       },
+      "transform": [
+        {"filter": "datum.year == 2022"}
+      ],
       "encoding": {
-        "x": {"field": "year", "type": "ordinal"},
+        "x": {"field": "year", "type": "quantitative"},
         "y": {"field": "poverty_rank", "type": "quantitative"},
-        "color": {"field": "state", "type": "nominal", "legend": null},
-        "tooltip": [
-          {"field": "state", "type": "nominal", "title": "State"},
-          {"field": "year", "type": "ordinal", "title": "Year"},
-          {"field": "poverty_rank", "type": "quantitative", "title": "Rank"},
-          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
-        ]
+        "text": {"field": "state", "type": "nominal"},
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Selangor", "W.P. Putrajaya", "Malaysia (Average)", "Sabah", "Kelantan"],
+            "range": ["#1f77b4", "#ff7f0e", "#2ca02c", "#9467bd", "#8c564b"]
+          },
+          "legend": null
+        },
+        "opacity": {
+          "condition": [
+            {"param": "state_select", "empty": false, "value": 1},
+            {"test": "datum.category == 'featured'", "value": 1}
+          ],
+          "value": 0.15
+        }
       }
     },
     {
-      "data": {"values": [{"x": "2020"}]},
+      "data": {"values": [{"x": 2020}]},
       "mark": {
         "type": "rule",
-        "strokeDash": [4, 4],
-        "color": "red",
-        "opacity": 0.5,
-        "strokeWidth": 1.5
+        "strokeDash": [6, 4],
+        "color": "#d32f2f",
+        "opacity": 0.6,
+        "strokeWidth": 2
       },
       "encoding": {
-        "x": {"field": "x", "type": "ordinal"}
+        "x": {"field": "x", "type": "quantitative"}
       }
     },
     {
-      "data": {"values": [{"x": "2020", "label": "COVID-19 Impact"}]},
+      "data": {"values": [{"x": 2020, "y": 1, "label": "COVID-19"}]},
       "mark": {
         "type": "text",
         "align": "center",
-        "dy": -250,
-        "fontSize": 11,
+        "baseline": "bottom",
+        "dy": -5,
+        "fontSize": 10,
         "fontWeight": "bold",
-        "color": "red"
+        "color": "#d32f2f"
       },
       "encoding": {
-        "x": {"field": "x", "type": "ordinal"},
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
         "text": {"field": "label", "type": "nominal"}
       }
     }
-  ]
+  ],
+  "config": {
+    "view": {"stroke": null}
+  }
 }

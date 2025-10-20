@@ -1,0 +1,38 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Malaysia State Poverty Rankings Over Time (2016–2022)",
+    "fontSize": 18
+  },
+  "width": 550,
+  "height": 500,
+  "data": {"url": "data/poverty_rankings_enhanced.csv"},
+  "mark": {
+    "type": "line",
+    "point": true
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "quantitative",
+      "title": "Year"
+    },
+    "y": {
+      "field": "poverty_rank",
+      "type": "quantitative",
+      "title": "Poverty Rank",
+      "scale": {"reverse": true}
+    },
+    "color": {
+      "field": "state",
+      "type": "nominal"
+    },
+    "opacity": {
+      "condition": {
+        "test": "datum.category == 'featured'",
+        "value": 1
+      },
+      "value": 0.1
+    }
+  }
+}

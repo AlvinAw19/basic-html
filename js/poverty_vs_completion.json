@@ -3,11 +3,12 @@
   "description": "Poverty rate vs completion rate (primary, Malaysia).",
   "title": {
     "text": "Poverty rate vs Completion rate (Primary) — Malaysia",
-    "fontSize": 16,
-    "font": "Arial"
+    "subtitle": " ", 
+    "fontSize": 18,
+    "anchor": "start"
   },
-  "height": 300,
-  "width": 900,
+  "height": 500,
+  "width": 550,
   "resolve": { "scale": { "y": "independent" }, "axis": { "y": "independent" } },
   "layer": [
     {

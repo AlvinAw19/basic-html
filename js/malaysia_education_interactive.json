@@ -1,20 +1,30 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 950,
+  "width": 970,
   "height": 450,
   "background": "#e3f2fd",
   "padding": 0,
   "projection": {
     "type": "mercator",
-    "center": [
-      109,
-      3.8
-    ],
-    "scale": 2500
+    "center": [109.5, 3.8],
+    "scale": 2650
   },
   "view": {
     "stroke": "transparent"
   },
+  "params": [
+    {
+      "name": "year_select",
+      "value": 2022,
+      "bind": {
+        "input": "range",
+        "min": 2016,
+        "max": 2022,
+        "step": 1,
+        "name": "Year: "
+      }
+    }
+  ],
   "layer": [
     {
       "data": {
@@ -28,10 +38,7 @@
     {
       "data": {
         "graticule": {
-          "step": [
-            2,
-            2
-          ]
+          "step": [2, 2]
         }
       },
       "mark": {
@@ -54,20 +61,21 @@
           "as": "state"
         },
         {
-          "lookup": "state",
+          "calculate": "datum.state + '_' + year_select",
+          "as": "state_year_key"
+        },
+        {
+          "lookup": "state_year_key",
           "from": {
             "data": {
-              "url": "data/state_school_completion.csv"
+              "url": "data/completion_by_year_keyed.csv"
             },
-            "key": "state",
-            "fields": [
-              "completion",
-              "Rate of Completion"
-            ]
+            "key": "state_year_key",
+            "fields": ["avg_completion", "year"]
           }
         },
         {
-          "calculate": "datum.completion >= 100.5 ? 'Very High (≥100.5%)' : datum.completion >= 99.5 ? 'High (99.5-100.4%)' : datum.completion >= 98.5 ? 'Medium (98.5-99.4%)' : datum.completion >= 97.5 ? 'Low (97.5-98.4%)' : 'Very Low (<97.5%)'",
+          "calculate": "datum.avg_completion >= 100.5 ? 'Very High (≥100.5%)' : datum.avg_completion >= 99.5 ? 'High (99.5-100.4%)' : datum.avg_completion >= 98.5 ? 'Medium (98.5-99.4%)' : datum.avg_completion >= 97.5 ? 'Low (97.5-98.4%)' : 'Very Low (<97.5%)'",
           "as": "completion_category"
         }
       ],
@@ -80,7 +88,6 @@
         "color": {
           "field": "completion_category",
           "type": "nominal",
-          "title": "Completion Rate Category",
           "scale": {
             "domain": [
               "Very Low (<97.5%)",
@@ -89,13 +96,7 @@
               "High (99.5-100.4%)",
               "Very High (≥100.5%)"
             ],
-            "range": [
-              "#fcbba1",
-              "#fc9272",
-              "#fb6a4a",
-              "#ef3b2c",
-              "#cb181d"
-            ]
+            "range": ["#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d"]
           },
           "legend": null
         },
@@ -105,13 +106,17 @@
             "title": "State"
           },
           {
-            "field": "completion",
-            "title": "Completion Rate (%)",
-            "format": ".1f"
+            "field": "avg_completion",
+            "title": "Average Completion Rate (%)",
+            "format": ".2f"
           },
           {
             "field": "completion_category",
             "title": "Category"
+          },
+          {
+            "field": "year",
+            "title": "Year"
           }
         ]
       }

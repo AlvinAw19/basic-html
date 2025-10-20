@@ -1,0 +1,368 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Poverty vs Education Completion Trends",
+    "subtitle": " ",
+    "fontSize": 18,
+    "anchor": "start"
+  },
+  "width": 450,
+  "height": 400,
+  "resolve": {
+    "scale": {"y": "independent"},
+    "axis": {"y": "independent"}
+  },
+  "layer": [
+    {
+      "data": {"url": "data/malaysia_poverty_national.csv"},
+      "layer": [
+        {
+          "transform": [{"filter": "datum.year <= 2019"}],
+          "mark": {
+            "type": "line",
+            "point": {"size": 100, "filled": true, "opacity": 0.4},
+            "color": "#1f77b4",
+            "strokeDash": [5, 3],
+            "strokeWidth": 2,
+            "opacity": 0.6,
+            "interpolate": "linear",
+            "tooltip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Year",
+              "axis": {"labelAngle": 0, "labelFontSize": 11}
+            },
+            "y": {
+              "field": "poverty_rate",
+              "type": "quantitative",
+              "title": "Poverty Rate (%)",
+              "scale": {"domain": [0, 10]},
+              "axis": {
+                "titleColor": "#1f77b4",
+                "labelColor": "#1f77b4",
+                "labelFontSize": 11,
+                "titleFontSize": 12,
+                "titleFontWeight": "bold"
+              }
+            },
+            "tooltip": [
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "poverty_rate", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
+            ]
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year >= 2019"}],
+          "mark": {
+            "type": "line",
+            "point": {"size": 100, "filled": true},
+            "color": "#1f77b4",
+            "strokeWidth": 2.5,
+            "opacity": 1,
+            "interpolate": "linear",
+            "tooltip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal"
+            },
+            "y": {
+              "field": "poverty_rate",
+              "type": "quantitative",
+              "scale": {"domain": [0, 10]}
+            },
+            "tooltip": [
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "poverty_rate", "type": "quantitative", "title": "Poverty Rate (%)", "format": ".2f"}
+            ]
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2019"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": 15,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#1f77b4"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "poverty_rate", "type": "quantitative"},
+            "text": {"field": "poverty_rate", "type": "quantitative", "format": ".1f"}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2020"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": -15,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#1f77b4"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "poverty_rate", "type": "quantitative"},
+            "text": {"field": "poverty_rate", "type": "quantitative", "format": ".1f"}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2022"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": -15,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#1f77b4"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "poverty_rate", "type": "quantitative"},
+            "text": {"field": "poverty_rate", "type": "quantitative", "format": ".1f"}
+          }
+        }
+      ]
+    },
+    {
+      "data": {"url": "data/state_completion_yearly.csv"},
+      "transform": [
+        {"filter": "datum.state == 'Malaysia'"},
+        {"filter": "datum.year >= 2016 && datum.year <= 2022"}
+      ],
+      "layer": [
+        {
+          "transform": [{"filter": "datum.year <= 2019"}],
+          "mark": {
+            "type": "line",
+            "point": {"size": 100, "filled": true, "color": "#ff7f0e", "opacity": 0.4},
+            "color": "#ff7f0e",
+            "strokeDash": [5, 3],
+            "strokeWidth": 2,
+            "opacity": 0.6,
+            "interpolate": "linear",
+            "tooltip": true
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {
+              "field": "avg_completion",
+              "type": "quantitative",
+              "title": "Completion Rate (%)",
+              "scale": {"domain": [90, 102]},
+              "axis": {
+                "titleColor": "#ff7f0e",
+                "labelColor": "#ff7f0e",
+                "orient": "right",
+                "labelFontSize": 11,
+                "titleFontSize": 12,
+                "titleFontWeight": "bold"
+              }
+            },
+            "tooltip": [
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "avg_completion", "type": "quantitative", "title": "Primary School Completion Rate (%)", "format": ".2f"}
+            ]
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year >= 2019"}],
+          "mark": {
+            "type": "line",
+            "point": {"size": 100, "filled": true, "color": "#ff7f0e"},
+            "color": "#ff7f0e",
+            "strokeWidth": 2.5,
+            "opacity": 1,
+            "interpolate": "linear",
+            "tooltip": true
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {
+              "field": "avg_completion",
+              "type": "quantitative",
+              "scale": {"domain": [90, 102]}
+            },
+            "tooltip": [
+              {"field": "year", "type": "ordinal", "title": "Year"},
+              {"field": "avg_completion", "type": "quantitative", "title": "School Completion Rate (%)", "format": ".2f"}
+            ]
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2019"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": -15,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#ff7f0e"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "avg_completion", "type": "quantitative"},
+            "text": {"field": "avg_completion", "type": "quantitative", "format": ".1f"}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2020"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": 18,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#ff7f0e"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "avg_completion", "type": "quantitative"},
+            "text": {"field": "avg_completion", "type": "quantitative", "format": ".1f"}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2021"}],
+          "mark": {
+            "type": "text",
+            "align": "center",
+            "dy": 18,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#ff7f0e"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "avg_completion", "type": "quantitative"},
+            "text": {"field": "avg_completion", "type": "quantitative", "format": ".1f"}
+          }
+        },
+        {
+          "transform": [{"filter": "datum.year == 2022"}],
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 8,
+            "dy": 0,
+            "fontSize": 10,
+            "fontWeight": "bold",
+            "color": "#ff7f0e"
+          },
+          "encoding": {
+            "x": {"field": "year", "type": "ordinal"},
+            "y": {"field": "avg_completion", "type": "quantitative"},
+            "text": {"field": "avg_completion", "type": "quantitative", "format": ".1f"}
+          }
+        }
+      ]
+    },
+    {
+      "data": {"values": [{"x": "2019"}]},
+      "mark": {
+        "type": "rule",
+        "strokeDash": [6, 4],
+        "color": "#757575",
+        "opacity": 0.5,
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "ordinal"}
+      }
+    },
+    {
+      "data": {"values": [
+        {
+          "x": 229,
+          "y": 273,
+          "title": "POST-2019:",
+          "line1": "Poverty rate increased from 5.6% to 9.0%",
+          "line2": "during COVID-19 pandemic, then decreased",
+          "line3": "2.9% by 2022. Completion rate dropped",
+          "line4": "to 95.6% in 2020, recovered to 99.3%."
+        }
+      ]},
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 13,
+            "fontWeight": "bold",
+            "color": "#d35400"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": null},
+            "y": {"field": "y", "type": "quantitative", "scale": null},
+            "text": {"field": "title", "type": "nominal"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 11,
+            "color": "#555555"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": null},
+            "y": {"value": 290},
+            "text": {"field": "line1", "type": "nominal"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 11,
+            "color": "#555555"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": null},
+            "y": {"value": 305},
+            "text": {"field": "line2", "type": "nominal"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 11,
+            "color": "#555555"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": null},
+            "y": {"value": 320},
+            "text": {"field": "line3", "type": "nominal"}
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "fontSize": 11,
+            "color": "#555555"
+          },
+          "encoding": {
+            "x": {"field": "x", "type": "quantitative", "scale": null},
+            "y": {"value": 335},
+            "text": {"field": "line4", "type": "nominal"}
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "view": {"stroke": null},
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    }
+  }
+}

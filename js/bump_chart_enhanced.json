@@ -1,0 +1,230 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "State Poverty Rankings Over Time",
+    "subtitle": " ", 
+    "fontSize": 18,
+    "anchor": "start"
+  },
+  "width": 450,
+  "height": 400,
+  "data": {"url": "data/poverty_rankings_enhanced.csv"},
+  "transform": [
+    {"calculate": "toString(datum.year)", "as":  "year_str"}
+  ],
+  "params": [
+    {
+      "name": "state_selection",
+      "value": null,
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "Johor",
+          "Kedah",
+          "Kelantan",
+          "Melaka",
+          "Negeri Sembilan",
+          "Pahang",
+          "Perak",
+          "Perlis",
+          "Pulau Pinang",
+          "Sabah",
+          "Sarawak",
+          "Selangor",
+          "Terengganu",
+          "W.P. Kuala Lumpur",
+          "W.P. Labuan",
+          "W.P. Putrajaya",
+          "Malaysia (Average)"
+        ],
+        "labels": [
+          "All States",
+          "Johor",
+          "Kedah",
+          "Kelantan",
+          "Melaka",
+          "Negeri Sembilan",
+          "Pahang",
+          "Perak",
+          "Perlis",
+          "Pulau Pinang",
+          "Sabah",
+          "Sarawak",
+          "Selangor",
+          "Terengganu",
+          "W.P. Kuala Lumpur",
+          "W.P. Labuan",
+          "W.P. Putrajaya",
+          "Malaysia (Average)"
+        ],
+        "name": "Select State: "
+      }
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "rect", "opacity": 0.12, "color": "#ffc107"},
+      "data": {"values": [{"year_start": "2019", "year_end": "2020"}]},
+      "encoding": {
+        "x": {"field": "year_start", "type": "ordinal"},
+        "x2": {"field": "year_end"},
+        "y": {"value": 0},
+        "y2": {"value": 400}
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "point": {"size": 80, "filled": true},
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "year_str",
+          "type": "ordinal",
+          "title": "Year",
+          "sort": ["2016", "2019", "2020", "2022"],
+          "axis": {
+            "labelAngle": 0,
+            "labelFontSize": 11
+          }
+        },
+        "y": {
+          "field": "poverty_rank",
+          "type": "quantitative",
+          "title": "Poverty Rank (1 = Best)",
+          "scale": {"domain": [0.5, 17.5], "reverse": true},
+          "axis": {"tickMinStep": 1, "labelFontSize": 11}
+        },
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "scale": {"scheme": "category20b"},
+          "legend": null
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "state_selection != null && datum.state == state_selection",
+              "value": 1
+            },
+            {
+              "test": "state_selection == null && datum.category == 'featured'",
+              "value": 1
+            }
+          ],
+          "value": 0.08
+        },
+        "strokeWidth": {
+          "condition": [
+            {
+              "test": "state_selection != null && datum.state == state_selection",
+              "value": 5
+            },
+            {
+              "test": "datum.state == 'Malaysia (Average)'",
+              "value": 4
+            }
+          ],
+          "value": 2.5
+        },
+        "strokeDash": {
+          "condition": {
+            "test": "datum.state == 'Malaysia (Average)'",
+            "value": [5, 3]
+          },
+          "value": [0]
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State:"},
+          {"field": "year_str", "type": "ordinal", "title": "Year:"},
+          {"field": "poverty_rank", "type": "quantitative", "title": "Rank:"},
+          {"field": "poverty_absolute", "type": "quantitative", "title": "Poverty Rate (%):", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 10,
+        "fontWeight": "600"
+      },
+      "transform": [
+        {"filter": "datum.year_str == '2022'"},
+        {
+          "filter": "state_selection != null ? datum.state == state_selection : datum.category == 'featured'"
+        }
+      ],
+      "encoding": {
+        "x": {"field": "year_str", "type": "ordinal"},
+        "y": {"field": "poverty_rank", "type": "quantitative"},
+        "text": {"field": "state", "type": "nominal"},
+        "color": {
+          "field": "state",
+          "type": "nominal",
+          "scale": {"scheme": "category20b"},
+          "legend": null
+        },
+        "opacity": {"value": 1}
+      }
+    },
+    {
+      "data": {"values": [{"x": "2020"}]},
+      "mark": {
+        "type": "rule",
+        "strokeDash": [6, 4],
+        "color": "#757575",
+        "opacity": 0.6,
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "ordinal"}
+      }
+    },
+    {
+      "data": {"values": [{"x": "2020", "label": "COVID-19"}]},
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "top",
+        "dy": 5,
+        "fontSize": 9,
+        "fontWeight": "bold",
+        "color": "#757575"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "ordinal"},
+        "y": {"value": 0},
+        "text": {"field": "label", "type": "nominal"}
+      }
+    },
+    {
+      "data": {"values": [
+        {"x": 275, "y": 290, "text": "This area highlights COVID-19 pandemic period"},
+        {"x": 275, "y": 305, "text": "(2019-2020) when poverty rate increased significantly"}
+      ]},
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "fontSize": 11,
+        "color": "#555555"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative", "scale": null},
+        "y": {"field": "y", "type": "quantitative", "scale": null},
+        "text": {"field": "text", "type": "nominal"}
+      }
+    }
+  ],
+  "config": {
+    "view": {"stroke": null},
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    }
+  }
+}
