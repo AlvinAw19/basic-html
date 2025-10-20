@@ -1,0 +1,165 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Gender Distribution of Students Across States",
+    "subtitle": " ",
+    "fontSize": 18,
+    "anchor": "start",
+    "font": "Arial",
+    "offset": 10
+  },
+  "width": 450,
+  "height": 330,
+  "background": "white",
+  "padding": {"bottom": 5},
+  "data": {"url": "data/enrolment_school_district.csv"},
+  "transform": [
+    {"filter": "datum.district == 'All Districts'"},
+    {"filter": "datum.date == '2022-01-01'"},
+    {"filter": "datum.sex == 'male' || datum.sex == 'female'"},
+    {"filter": "datum.state != 'Malaysia'"},
+    {"filter": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang' || datum.state == 'Kedah' || datum.state == 'Johor' || datum.state == 'Pulau Pinang' || datum.state == 'Selangor' || datum.state == 'W.P. Putrajaya'"},
+    {
+      "aggregate": [{"op": "sum", "field": "students", "as": "total_students"}],
+      "groupby": ["state", "sex"]
+    },
+    {
+      "calculate": "datum.sex == 'male' ? -datum.total_students : datum.total_students",
+      "as": "signed_students"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "nominal",
+      "sort": ["Sarawak", "Perak", "Pahang", "Kedah", "Johor", "Pulau Pinang", "Selangor", "W.P. Putrajaya"],
+      "axis": {
+        "labelFontSize": 13,
+        "labelFont": "Arial",
+        "title": null
+      },
+      "scale": {
+        "paddingInner": 0.15,
+        "paddingOuter": 0.1
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#BBBBBB",
+        "strokeWidth": 4
+      },
+      "encoding": {
+        "x": {"datum": 0}
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "height": {"band": 1.05},
+        "stroke": "#cbcaca",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "x": {
+          "field": "signed_students",
+          "type": "quantitative",
+          "title": "Number of Students",
+          "axis": {
+            "format": ",",
+            "labelExpr": "abs(datum.value)",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "titleFont": "Arial",
+            "labelFont": "Arial",
+            "values": [-600000,-400000, -200000, 0, 200000, 400000, 600000]
+          },
+          "scale": {
+            "nice": false,
+            "domain": [-600000, 600000]
+          }
+        },
+        "color": {
+          "field": "sex",
+          "type": "nominal",
+          "scale": {
+            "domain": ["male", "female"],
+            "range": ["#7DB3E8", "#F5A7C1"]
+          },
+          "legend": {
+            "title": "Gender",
+            "orient": "right",
+            "labelExpr": "datum.value == 'male' ? 'Boys' : 'Girls'",
+            "titleFontSize": 13,
+            "labelFontSize": 12,
+            "symbolSize": 150
+          }
+        },
+        "tooltip": [
+          {"field": "state", "type": "nominal", "title": "State"},
+          {"field": "sex", "type": "nominal", "title": "Gender", "format": ""},
+          {"field": "total_students", "type": "quantitative", "title": "Total Students", "format": ","}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -5,
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "color": "#5A93C8"
+      },
+      "transform": [
+        {"filter": "datum.sex == 'male'"}
+      ],
+      "encoding": {
+        "x": {
+          "field": "signed_students",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "total_students",
+          "type": "quantitative",
+          "format": ","
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 5,
+        "fontSize": 10,
+        "fontWeight": "normal",
+        "color": "#D88BA8"
+      },
+      "transform": [
+        {"filter": "datum.sex == 'female'"}
+      ],
+      "encoding": {
+        "x": {
+          "field": "signed_students",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "total_students",
+          "type": "quantitative",
+          "format": ","
+        }
+      }
+    }
+  ],
+  "config": {
+    "axis": {
+      "labelFont": "Arial",
+      "titleFont": "Arial"
+    },
+    "title": {
+      "font": "Arial"
+    }
+  }
+}

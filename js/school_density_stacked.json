@@ -1,15 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "School Density per 100,000 Students by State (2022)",
+    "text": "School Density Across States",
+    "subtitle": " ",
     "fontSize": 18,
     "font": "Arial",
-    "anchor": "start"
+    "anchor": "start",
+    "offset": 10
   },
-  "width": 900,
-  "height": 550,
+  "width": 380,
+  "height": 330,
   "background": "white",
-  "padding": 10,
+  "padding": {"bottom": 5},
   "data": {
     "values": [
       {"state": "Sarawak", "stage": "Primary", "density": 537.57, "rank": 1},
@@ -21,6 +23,9 @@
       {"state": "Pahang", "stage": "Primary", "density": 358.12, "rank": 3},
       {"state": "Pahang", "stage": "Secondary", "density": 194.46, "rank": 3},
       {"state": "Pahang", "stage": "Post-Secondary", "density": 26.77, "rank": 3},
+      {"state": "Average", "stage": "Primary", "density": 306.25, "rank": 4},
+      {"state": "Average", "stage": "Secondary", "density": 128.79, "rank": 4},
+      {"state": "Average", "stage": "Post-Secondary", "density": 27.32, "rank": 4},
       {"state": "Kedah", "stage": "Primary", "density": 290.68, "rank": 8},
       {"state": "Kedah", "stage": "Secondary", "density": 142.07, "rank": 8},
       {"state": "Kedah", "stage": "Post-Secondary", "density": 20.24, "rank": 8},
@@ -40,15 +45,12 @@
   },
   "transform": [
     {
-      "filter": "datum.stage != 'Post-Secondary'"
+      "calculate": "datum.stage == 'Primary' ? 1 : (datum.stage == 'Secondary' ? 2 : 3)",
+      "as": "stage_order"
     },
     {
-      "joinaggregate": [{"op": "sum", "field": "density", "as": "total_ps2"}],
+      "joinaggregate": [{"op": "sum", "field": "density", "as": "total_density"}],
       "groupby": ["state"]
-    },
-    {
-      "calculate": "datum.total_ps2",
-      "as": "total_density"
     },
     {
       "sort": [{"field": "total_density", "order": "descending"}, {"field": "state"}, {"field": "stage"}]
@@ -67,16 +69,22 @@
     "y": {
       "field": "state",
       "type": "nominal",
-      "sort": ["Sarawak", "Perak", "Pahang", "Kedah", "Johor", "Pulau Pinang", "Selangor", "W.P. Putrajaya"],
+      "sort": ["Sarawak", "Perak", "Pahang", "Average", "Kedah", "Johor", "Pulau Pinang", "Selangor", "W.P. Putrajaya"],
       "axis": {
         "labelFontSize": 13,
         "labelFont": "Arial",
         "labelFontWeight": {
-          "condition": {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "bold"},
+          "condition": [
+            {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "bold"},
+            {"test": "datum.value == 'Average'", "value": "bold"}
+          ],
           "value": "normal"
         },
         "labelColor": {
-          "condition": {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "#2c3e50"},
+          "condition": [
+            {"test": "datum.value == 'Sarawak' || datum.value == 'Perak' || datum.value == 'Pahang'", "value": "#2c3e50"},
+            {"test": "datum.value == 'Average'", "value": "#888888"}
+          ],
           "value": "#666666"
         }
       }
@@ -85,13 +93,16 @@
   "layer": [
     {
       "mark": {
-        "type": "bar"
+        "type": "bar",
+        "stroke": "#000000",
+        "strokeWidth": 0.5
       },
       "encoding": {
         "x": {
           "field": "density",
           "type": "quantitative",
           "title": "Schools per 100,000 Students",
+          "stack": "zero",
           "axis": {
             "labelFontSize": 12,
             "titleFontSize": 14,
@@ -101,12 +112,16 @@
           }
         },
         "color": {
+          "condition": {
+            "test": "datum.state == 'Average'",
+            "value": "#BDBDBD"
+          },
           "field": "stage",
           "type": "nominal",
           "title": "School Stage",
           "scale": {
-            "domain": ["Primary", "Secondary"],
-            "range": ["#3498db", "#e74c3c"]
+            "domain": ["Primary", "Secondary", "Post-Secondary"],
+            "range": ["#F9D57A", "#6EC5A2", "#9B6BD6"]
           },
           "legend": {
             "orient": "right",
@@ -116,18 +131,17 @@
             "symbolSize": 150
           }
         },
+        "order": {
+          "field": "stage_order",
+          "type": "quantitative"
+        },
         "opacity": {
-          "condition": {
-            "test": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang'",
-            "value": 1
-          },
+          "condition": [
+            {"test": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang'", "value": 1},
+            {"test": "datum.state == 'Average'", "value": 0.5}
+          ],
           "value": 0.45
         },
-        "stroke": {
-          "condition": {"test": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang'", "value": "#2c3e50"},
-          "value": "#e0e0e0"
-        },
-        "strokeWidth": {"value": 0.8},
         "tooltip": [
           {"field": "state", "title": "State"},
           {"field": "stage", "title": "Stage"},
@@ -150,10 +164,11 @@
           "groupby": ["state"]
         },
         {
-          "filter": "datum.rank_by_total <= 3"
+          "filter": "datum.state == 'Sarawak' || datum.state == 'Perak' || datum.state == 'Pahang' || datum.state == 'Average'"
         }
       ],
       "encoding": {
+        "y": {"field": "state", "type": "nominal"},
         "x": {"field": "total", "type": "quantitative"},
         "text": {"field": "total", "type": "quantitative", "format": ".1f"}
       }
@@ -173,10 +188,11 @@
           "groupby": ["state"]
         },
         {
-          "filter": "datum.rank_by_total >= 6"
+          "filter": "datum.state != 'Sarawak' && datum.state != 'Perak' && datum.state != 'Pahang' && datum.state != 'Average'"
         }
       ],
       "encoding": {
+        "y": {"field": "state", "type": "nominal"},
         "x": {"field": "total", "type": "quantitative"},
         "text": {"field": "total", "type": "quantitative", "format": ".1f"}
       }

@@ -7,8 +7,8 @@
     "subtitleFontSize": 11,
     "anchor": "start"
   },
-  "width": 500,
-  "height": 500,
+  "width": 380,
+  "height": 330,
   "background": null,
   "config": {
     "view": {"stroke": null},
