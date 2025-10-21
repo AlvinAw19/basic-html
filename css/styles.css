@@ -141,9 +141,11 @@ main {
    ======================================== */
 .two-column-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  grid-template-columns: repeat(2, minmax(600px, 1fr)); /* Always keep 2 columns */
   gap: 30px;
   margin-bottom: 40px;
+  overflow-x: auto; /* Enable horizontal scrolling when needed */
+  min-width: 0; /* Allow grid to shrink within parent */
 }
 
 .full-width {
@@ -527,11 +529,7 @@ main {
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
-@media (max-width: 1200px) {
-  .two-column-grid {
-    grid-template-columns: 1fr;
-  }
-}
+/* Removed max-width: 1200px media query to maintain two-column layout with scrolling */
 
 @media (max-width: 768px) {
   .dashboard-header h1 {
