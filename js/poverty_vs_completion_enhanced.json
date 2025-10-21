@@ -6,7 +6,7 @@
     "fontSize": 18,
     "anchor": "start"
   },
-  "width": 450,
+  "width": 520,
   "height": 400,
   "resolve": {
     "scale": {"y": "independent"},
@@ -279,7 +279,7 @@
     {
       "data": {"values": [
         {
-          "x": 229,
+          "x": 285,
           "y": 273,
           "title": "POST-2019:",
           "line1": "Poverty rate increased from 5.6% to 9.0%",

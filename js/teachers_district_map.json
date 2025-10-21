@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 380,
+  "width":500,
   "height": 330,
   "background": "white",
   "padding": 10,
@@ -10,13 +10,14 @@
       109.5,
       4.0
     ],
-    "scale": 2200
+    "scale": 1250
   },
   "view": {
     "stroke": "transparent"
   },
   "title": {
-    "text": "Number of Teachers by District in Malaysia (2022)",
+    "text": "Uneven Distribution of Teachers Across Districts",
+    "subtitle": " ",
     "fontSize": 18,
     "anchor": "start"
   },
@@ -107,11 +108,13 @@
           },
           "legend": {
             "title": "Teachers",
-            "symbolFillColor": "#e07a5f"
+            "symbolFillColor": "#2E8B57",
+            "orient": "right",
+            "values": [10000, 20000, 30000, 40000]
           }
         },
         "color": {
-          "value": "#e07a5f"
+          "value": "#2E8B57"
         },
         "tooltip": [
           {
@@ -176,8 +179,8 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": -50,
-        "dy": -20,
+        "dx": -80,
+        "dy": 10,
         "fontSize": 11,
         "fontWeight": "bold"
       },
@@ -196,8 +199,8 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": -50,
-        "dy": -8,
+        "dx": -80,
+        "dy": 22,
         "fontSize": 9,
         "fontWeight": "normal",
         "color": "#666666"
@@ -217,7 +220,7 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 20,
+        "dx": -100,
         "dy": 0,
         "fontSize": 11,
         "fontWeight": "bold"
@@ -237,7 +240,7 @@
       "mark": {
         "type": "text",
         "align": "left",
-        "dx": 20,
+        "dx": -100,
         "dy": 12,
         "fontSize": 9,
         "fontWeight": "normal",
@@ -246,7 +249,7 @@
       "encoding": {
         "longitude": {"field": "longitude"},
         "latitude": {"field": "latitude"},
-        "text": {"value": "Sabah - 14,124 teachers"}
+        "text": {"value": "14,124 teachers"}
       }
     }
   ],

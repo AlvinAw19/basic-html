@@ -149,6 +149,17 @@
       "titleFontSize": 12,
       "labelFontSize": 11,
       "symbolType": "square"
+    },
+    "range": {
+      "ramp": {
+        "scheme": "blues"
+      }
+    },
+    "axis": {
+      "labelFontSize": 14,
+      "titleFontSize": 14,
+      "labelPadding": 8,
+      "titlePadding": 10
     }
   }
 }

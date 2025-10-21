@@ -8,6 +8,38 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.16.3"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.24.0"></script>
   <link rel="stylesheet" href="css/styles.css?v=20250120">
+  <style>
+    /* Vega slider styling */
+    .vega-bindings {
+      padding: 10px 16px !important;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .vega-bind {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .vega-bind-name {
+      font-size: 14px !important;
+      font-weight: 500;
+      min-width: 45px;
+    }
+    .vega-bind input[type="range"] {
+      flex: 1;
+      height: 5px;
+      margin: 0 8px;
+    }
+    .vega-bind input[type="number"] {
+      font-size: 14px !important;
+      font-weight: 600;
+      padding: 3px 6px;
+      border: none;
+      background: transparent;
+      width: 45px;
+    }
+  </style>
 </head>
 <body>
   <!-- Header Section -->
@@ -162,12 +194,12 @@ Meanwhile, <strong>Kelantan</strong> and <strong>Sabah</strong> faced higher pov
     </div>
 
     <!-- Row 2: Teachers Map and Ratio Heatmap -->
-    <div class="two-column-grid">
+    <!-- <div class="two-column-grid">
       <section id="teachers-section">
         <div class="chart-container">
           <div id="teachers_map"></div>
           <div class="chart-caption">
-            <p><strong>Resource Allocation:</strong> Malaysia has 416,366 teachers across 152 districts. Urban centers like Johor Bahru (35,008) and Kuala Lumpur (33,276) have the highest concentration, highlighting resource disparities.</p>
+<p><strong>Urban centers concentrate the most teachers</strong>, with <strong>Johor Bahru (35,008)</strong> and <strong>Kuala Lumpur (33,276)</strong> far exceeding other districts. Eastern Malaysia, including <strong>Sabah</strong> and <strong>Sarawak</strong>, shows <strong>lower teacher density</strong>, reflecting ongoing <strong>urban–rural disparities</strong> in educational staffing.</p>
           </div>
         </div>
       </section>
@@ -177,6 +209,27 @@ Meanwhile, <strong>Kelantan</strong> and <strong>Sabah</strong> faced higher pov
           <div id="teacher_ratio_heatmap"></div>
           <div class="chart-caption">
             <p><strong>Teaching Pressure:</strong> Kelantan Primary shows the highest pressure (13.5:1), while W.P. Putrajaya Secondary has the lowest (9.8:1). States with ratios above 13 may benefit from targeted teacher recruitment.</p>
+          </div>
+        </div>
+      </section>
+    </div> -->
+
+    <!-- Row 2 Copy: Teachers Map and Ratio Heatmap (for testing) -->
+    <div class="two-column-grid">
+      <section id="teachers-section-copy">
+        <div class="chart-container">
+          <div id="teachers_map_copy"></div>
+          <div class="chart-caption">
+<p><strong>Urban centers concentrate the most teachers</strong>, with <strong>Johor Bahru (35,008)</strong> and <strong>Kuala Lumpur (33,276)</strong> far exceeding other districts. Eastern Malaysia, including <strong>Sabah</strong> and <strong>Sarawak</strong>, shows <strong>lower teacher density</strong>, reflecting ongoing <strong>urban–rural disparities</strong> in educational staffing.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="teacher-ratio-section-copy">
+        <div class="chart-container">
+          <div id="teacher_ratio_heatmap_copy"></div>
+          <div class="chart-caption">
+<p>States with <strong>lower teacher–student ratios</strong> generally achieve <strong>higher completion rates</strong>. <strong>Putrajaya</strong> stands out, reflecting efficient resource use. In contrast, states above <strong>12:1</strong> such as <strong>Kelantan</strong> and <strong>Terengganu</strong> face higher teaching pressure and may need targeted recruitment.</p>
           </div>
         </div>
       </section>
@@ -207,17 +260,36 @@ Meanwhile, <strong>Kelantan</strong> and <strong>Sabah</strong> faced higher pov
       </section>
     </div> -->
 
-    <!-- Footer Section -->
-    <footer class="dashboard-footer">
-      <div class="footer-summary">
-        <p><strong>Summary:</strong> Malaysia's education story reveals how geography and inequality continue to shape learning outcomes. Rural and low-income states face compounded challenges—higher poverty rates, dispersed infrastructure, and greater teaching pressure. Equitable teacher allocation and targeted resources remain key to nationwide educational progress.</p>
+<!-- Footer Section -->
+<footer style="background: linear-gradient(135deg, #3b5998 0%, #2c4877 100%); color: white; padding: 32px 0; margin-top: 60px; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); font-size: 15px;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 0 40px;">
+
+    <!-- Top: Author -->
+    <div>
+      <p style="margin: 0; font-size: 16px; line-height: 1.8;">
+        Designed and Created by <strong>Aw Shen Yang</strong><br>
+        <span style="font-size: 13px; opacity: 0.85;">Date: 21 October 2025</span>
+      </p>
+    </div>
+
+    <!-- Bottom: Data Sources -->
+    <div style="width: 100%;">
+      <p style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">Data Sources:</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 10px 30px; line-height: 1.8;">
+        <a href="https://open.dosm.gov.my/data-catalogue/completion_school_state" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">School Completion Rates by State — OpenDOSM</a>
+        <a href="https://open.dosm.gov.my/data-catalogue/enrolment_school_district" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">Student Enrolment by District — OpenDOSM</a>
+        <a href="https://open.dosm.gov.my/data-catalogue/teachers_district" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">Teachers Distribution by District — OpenDOSM</a>
+        <a href="https://open.dosm.gov.my/data-catalogue/schools_district" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">School by District — OpenDOSM</a>
+        <a href="https://data.gov.my/data-catalogue/hh_poverty_state" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">Household Poverty Rates by State — Data.gov.my</a>
+        <a href="https://gadm.org/download_country.html#google_vignette" target="_blank" style="color: white; text-decoration: underline; opacity: 0.9;">Malaysia Map — GADM</a>
       </div>
-      <div class="footer-metadata">
-        <p><strong>Data Sources:</strong> OpenDOSM (2022), Ministry of Education Malaysia, World Bank EdStats</p>
-        <p><strong>Prepared by:</strong> Data Visualization Team | <strong>Year:</strong> 2025 | <strong>Tool:</strong> Vega-Lite</p>
-      </div>
-    </footer>
-  </main>
+    </div>
+
+  </div>
+</footer>
+
+
+
 
   <script type="text/javascript">
     // High quality rendering options - use SVG for crisp rendering
@@ -254,6 +326,12 @@ Meanwhile, <strong>Kelantan</strong> and <strong>Sabah</strong> faced higher pov
     // Teacher-Student Ratio Heatmap
     const teacherRatioSpec = "js/teacher_student_ratio_heatmap.json";
     vegaEmbed('#teacher_ratio_heatmap', teacherRatioSpec, vegaOptions).catch(console.error);
+
+    // Copy of Teachers Map (for testing)
+    vegaEmbed('#teachers_map_copy', teachersSpec, vegaOptions).catch(console.error);
+
+    // Copy of Teacher-Student Ratio Heatmap (for testing)
+    vegaEmbed('#teacher_ratio_heatmap_copy', teacherRatioSpec, vegaOptions).catch(console.error);
 
     // Copy of School Density Chart (for testing)
     vegaEmbed('#school_density_chart_copy', schoolDensitySpec, vegaOptions).catch(console.error);

@@ -1,95 +1,219 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Teacher–Student Ratio by State and Level (2022)",
-    "subtitle": "Where are students most underserved? Darker colors = more students per teacher",
+    "text": "Teaching Load and Student Success Across States",
+    "subtitle": " ",
     "fontSize": 18,
-    "subtitleFontSize": 12,
-    "anchor": "start"
+    "anchor": "start",
+    "offset": 10
   },
-  "width": 380,
-  "height": 330,
+  "width": 460,
+  "height": 300,
   "background": null,
+  "padding": {"bottom": 5},
   "config": {
-    "view": {"stroke": null},
-    "axis": {"grid": false, "labelFontSize": 11}
+    "view": {"stroke": null}
   },
   "data": {"url": "data/teacher_student_ratio.csv"},
   "transform": [
     {"filter": "datum.level != 'Post-Secondary'"},
-    {"calculate": "format(datum.ratio, '.1f')", "as": "ratio_formatted"}
+    {
+      "aggregate": [
+        {"op": "mean", "field": "ratio", "as": "avg_ratio"},
+        {"op": "sum", "field": "students", "as": "total_students"},
+        {"op": "sum", "field": "teachers", "as": "total_teachers"}
+      ],
+      "groupby": ["state"]
+    },
+    {
+      "lookup": "state",
+      "from": {
+        "data": {"url": "data/completion_school_state.csv"},
+        "key": "state",
+        "fields": ["completion", "stage"]
+      },
+      "as": ["completion", "stage"]
+    },
+    {"filter": "datum.stage != null"},
+    {"filter": "year(datum.date) == 2022 || datum.date == null"},
+    {
+      "aggregate": [
+        {"op": "mean", "field": "completion", "as": "avg_completion"},
+        {"op": "mean", "field": "avg_ratio", "as": "final_ratio"},
+        {"op": "mean", "field": "total_students", "as": "final_students"},
+        {"op": "mean", "field": "total_teachers", "as": "final_teachers"}
+      ],
+      "groupby": ["state"]
+    },
+    {
+      "calculate": "datum.avg_completion >= 98 ? 'High' : 'Moderate'",
+      "as": "completion_category"
+    }
   ],
   "layer": [
     {
-      "mark": {"type": "rect", "stroke": "#ddd", "strokeWidth": 1},
+      "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "stroke": "#666",
+        "strokeWidth": 1
+      },
       "encoding": {
         "x": {
-          "field": "level",
-          "type": "nominal",
-          "title": "Education Level",
-          "axis": {"labelAngle": 0, "labelFontSize": 12, "titleFontSize": 13},
-          "sort": ["Primary", "Secondary", "Post-Secondary"]
+          "field": "final_ratio",
+          "type": "quantitative",
+          "title": "Average Teacher–Student Ratio",
+          "scale": {"domain": [10, 14]},
+          "axis": {"grid": true, "labelFontSize": 11, "titleFontSize": 12}
         },
         "y": {
-          "field": "state",
-          "type": "nominal",
-          "title": "State",
-          "axis": {"labelFontSize": 11, "titleFontSize": 13},
-          "sort": {"op": "mean", "field": "ratio", "order": "descending"}
-        },
-        "color": {
-          "field": "ratio",
+          "field": "avg_completion",
           "type": "quantitative",
-          "title": ["Students per Teacher", "(Darker = Higher Pressure)"],
-          "scale": {
-            "scheme": "yelloworangered",
-            "domain": [9, 14],
-            "range": ["#ffffb2", "#fecc5c", "#fd8d3c", "#f03b20", "#bd0026"]
-          },
+          "title": "Average Completion Rate (%)",
+          "scale": {"domain": [96, 104]},
+          "axis": {"grid": true, "labelFontSize": 11, "titleFontSize": 12}
+        },
+        "size": {
+          "field": "final_students",
+          "type": "quantitative",
+          "title": "Total Students",
+          "scale": {"range": [100, 1000]},
           "legend": {
             "orient": "right",
-            "gradientLength": 300,
-            "titleFontSize": 12,
-            "labelFontSize": 11
+            "values": [200000, 400000, 600000, 800000]
           }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.state == 'W.P. Putrajaya'",
+            "value": "#6A35B8"
+          },
+          "value": "#B8A7D9"
         },
         "tooltip": [
           {"field": "state", "type": "nominal", "title": "State"},
-          {"field": "level", "type": "nominal", "title": "Level"},
-          {"field": "ratio_formatted", "type": "nominal", "title": "Student:Teacher Ratio"},
-          {"field": "students", "type": "quantitative", "title": "Students", "format": ",.0f"},
-          {"field": "teachers", "type": "quantitative", "title": "Teachers", "format": ",.0f"}
+          {"field": "final_ratio", "type": "quantitative", "title": "Average Ratio", "format": ".2f"},
+          {"field": "avg_completion", "type": "quantitative", "title": "Average Completion Rate", "format": ".1f"},
+          {"field": "final_students", "type": "quantitative", "title": "Total Students", "format": ",.0f"},
+          {"field": "final_teachers", "type": "quantitative", "title": "Total Teachers", "format": ",.0f"},
+          {"field": "completion_category", "type": "nominal", "title": "Category"}
         ]
       }
     },
     {
-      "mark": {"type": "text", "fontSize": 11, "fontWeight": "bold"},
+      "data": {
+        "values": [
+          {"x": 11.5, "y": 103}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -80,
+        "dy": -25,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#6A35B8"
+      },
       "encoding": {
-        "x": {
-          "field": "level",
-          "type": "nominal",
-          "sort": ["Primary", "Secondary", "Post-Secondary"]
-        },
-        "y": {
-          "field": "state",
-          "type": "nominal",
-          "sort": {"op": "mean", "field": "ratio", "order": "descending"}
-        },
-        "text": {"field": "ratio_formatted", "type": "nominal"},
-        "color": {
-          "condition": {
-            "test": "datum.ratio >= 13.4 || datum.ratio <= 10.0",
-            "value": "#ffffff"
-          },
-          "value": "transparent"
-        },
-        "opacity": {
-          "condition": {
-            "test": "datum.ratio >= 13.4 || datum.ratio <= 10.0",
-            "value": 1
-          },
-          "value": 0
-        }
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "W.P. Putrajaya"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"x": 11.5, "y": 102.65}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -80,
+        "dy": -25,
+        "fontSize": 9,
+        "color": "#666"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "Lowest teacher-student ratio (10.65:1)"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"x": 11.5, "y": 102.35}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": -80,
+        "dy": -25,
+        "fontSize": 9,
+        "color": "#666"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "with exceptional completion (104%)"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"x": 12.6, "y": 98}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10,
+        "color": "#555",
+        "fontWeight": "bold"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "Lower teacher-student ratios"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"x": 12.6, "y": 97.7}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 9,
+        "color": "#666"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "tend to correlate with higher"}
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"x": 12.6, "y": 97.45}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 9,
+        "color": "#666"
+      },
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"},
+        "text": {"value": "completion rates across states"}
       }
     }
   ]

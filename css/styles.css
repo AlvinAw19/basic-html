@@ -296,7 +296,7 @@ main {
    CHART CAPTIONS
    ======================================== */
 .chart-caption {
-  margin-top: 20px;
+  margin-top: 5px;
   padding: 15px 18px;
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-left: 4px solid #3b82f6;

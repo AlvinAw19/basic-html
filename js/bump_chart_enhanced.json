@@ -6,7 +6,7 @@
     "fontSize": 18,
     "anchor": "start"
   },
-  "width": 450,
+  "width": 520,
   "height": 400,
   "data": {"url": "data/poverty_rankings_enhanced.csv"},
   "transform": [
@@ -204,8 +204,8 @@
     },
     {
       "data": {"values": [
-        {"x": 275, "y": 290, "text": "This area highlights COVID-19 pandemic period"},
-        {"x": 275, "y": 305, "text": "(2019-2020) when poverty rate increased significantly"}
+        {"x": 280, "y": 290, "text": "This area highlights COVID-19 pandemic period"},
+        {"x": 280, "y": 305, "text": "(2019-2020) when poverty rate increased significantly"}
       ]},
       "mark": {
         "type": "text",
